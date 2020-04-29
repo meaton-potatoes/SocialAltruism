@@ -1,0 +1,11 @@
+<div class='card'>
+  <div class='card-body'>
+    <h1><%= @organization['name'] %></h1>
+    <h3>Total Donated by Users: <%= MoneyHelper.format_amount(Donation.total_donations_for(params[:id])) %></h3>
+    <p><%= link_to 'Donate', new_donation_path(organization_id: @organization['id']) %></p>
+    <p>
+      <%= @organization.inspect %>
+    </p>
+  </div>
+</div>
+

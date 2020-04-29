@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Social Altruism</title>
+    <%= favicon_link_tag asset_path('favicon.ico') %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <script src="https://kit.fontawesome.com/4bf6a0b500.js" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+      integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= render partial: 'partials/navigation' %>
+    <br/>
+    <div class="container">
+      <% if flash[:alert] %>
+        <br>
+        <div class='card'>
+          <div class='card-body'>
+            <div class='alert alert-danger'>
+              <%= flash[:alert] %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% if flash[:success] %>
+        <br>
+        <div class='card'>
+          <div class='card-body'>
+            <div class='alert alert-success'>
+              <%= flash[:success] %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <%= yield %>
+    </div>
+  </body>
+</html>

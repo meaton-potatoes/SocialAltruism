@@ -1,0 +1,15 @@
+<div class='card'>
+  <div class='card-body'>
+    <h1>Edit Profile</h1>
+    <form action="<%= user_path(current_user.resource_id) %>" method='post'>
+      <input type="hidden" name="_method" value="put" />
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <div class='form-group'>
+        <label for='nickname'>Nickname</label>
+        <input type="text" name="user[nickname]" value='<%= current_user.nickname %>' class='form-control'>
+      </div>
+      
+      <button class='btn btn-primary'>Update</button>
+    </form>
+  </div>
+</div>

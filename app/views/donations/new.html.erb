@@ -1,0 +1,59 @@
+<br>
+<div class="card">
+  <div class-></div>
+  <div class="card-body">
+    <h5 class="card-title">
+      <h1>Make a donation to <u><%= link_to @organization['name'], organization_path(@organization['id']) %></u></h1>
+    </h5>
+    <form action="/donations" method="POST" id="payment-form">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="donation[organization_id]" value="<%= params[:organization_id] %>">
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='card_number'>Card Number</label>
+            <input type="number" name="donation[card][number]" id='card_number' class='form-control' value='4242424242424242' required>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='card_cvc'>CVC</label>
+            <input type="number" name="donation[card][cvc]" id='card_cvc' maxlength="3" class='form-control' value='123' required>
+          </div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='card_month'>Expiration Month</label>
+            <select name="donation[card][exp_month]" id='card_month' class='form-control'>
+              <% (1..12).each do |i| %>
+                <option value=<%= i %> <% if i == 6 %> selected <% end %>><%= i %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='card_year'>Expiration Year</label>
+            <input type="number" name="donation[card][exp_year]" id='card_year' maxlength="4" class='form-control' value='2021' required>
+          </div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='amount'>Amount</label>
+            <input type="number" name="donation[amount]" id='amount' step='.01' class='form-control' value="<%= @donation[:amount] %>" required>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label></label>
+            <button class='form-control btn btn-primary'>Donate!</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class='card'>
+  <div class='card-body'>
+    <form action='/organizations' method='get'>
+      <div class='row'>
+        <div class='col-md-6'>
+          <h1>Organizations</h1>
+        </div>
+        <div class='col-md-4'>
+          <input type="text" name="query" class='form-control' value="<%= params[:query] %>">
+        </div>
+        <div class='col-md-1'>
+          <button class='btn btn-primary'>Search</button>
+        </div>
+      </div>
+    </form>
+    <table id='organizations'>
+      <tbody>
+        <% @organizations['results'].each do |organization| %>
+          <tr>
+            <td><img src='<%= organization['logo_url'] %>'></td>
+            <td>
+              <h3><%= organization['name'] %></h3>
+              <p><%= organization['mission']&.truncate(300) %></p>
+              <p><%= link_to 'Website', organization['website_url'], target: '_blank' %></p>
+              <p><%= link_to 'Donate', new_donation_path(organization_id: organization['id']) %></p>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+  </div>
+</div>

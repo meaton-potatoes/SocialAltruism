@@ -1,0 +1,12 @@
+<div class='card'>
+  <div class='card-body'>
+    <% if current_user %>
+      <h1>Welcome, <%= current_user.first_name %></h1>
+      <div>
+        <%= link_to 'View Organizations', organizations_path %>
+      </div>
+    <% else %>
+      <h1>Welcome</h1>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class='card'>
+  <div class='card-body'>
+    <h1>Donation <%= @donation.resource_id %></h1>
+    <h3>To: <a href='/organizations/<%= @donation.pledgeling_organization_id %>'><%= @donation.pledgeling_organization_name %></a></h3>
+    <h3>Amount: <%= MoneyHelper.format_amount(@donation.amount) %></h3>
+  </div>
+</div>
