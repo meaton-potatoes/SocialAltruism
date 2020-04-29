@@ -6,7 +6,7 @@ class Donation < ApplicationRecord
   before_create :set_resource_id
 
   def self.generate(params)
-    if Rails.env.development?
+    unless Rails.env.production?
       params[:card][:number] = '4242424242424242'
     end
 
@@ -15,7 +15,7 @@ class Donation < ApplicationRecord
       donation.errors[:stripe] << stripe_response.dig('error', 'message') if stripe_response['error']
 
       pledgeling_response = Pledgeling::Donation.create(
-        charge_source: Rails.env.development? ? 'tok_visa' : stripe_response['id'],
+        charge_source: Rails.env.production? ? stripe_response['id'] : 'tok_visa',
         email: donation.user.email,
         first_name: donation.user.first_name,
         last_name: donation.user.last_name,

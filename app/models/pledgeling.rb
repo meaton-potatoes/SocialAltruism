@@ -8,8 +8,6 @@ module Pledgeling
 
   class Donation
     def self.create(donation)
-      donation[:charge_source] = 'tok_visa' if Rails.env.development?
-
       HTTParty.post(
         "#{BASE_URL}/v1/donations",
         query: donation,
