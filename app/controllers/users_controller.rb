@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def update
     if current_user.update_attributes(user_params)
-      flash[:success] = 'Your profile was successfully update'
+      flash[:success] = 'Your profile was successfully updated'
     end
 
     redirect_to user_path(current_user.resource_id)
