@@ -1,9 +1,9 @@
-<nav class="navbar navbar-light bg-light justify-content-between">
+<nav class="navbar navbar-dark bg-primary justify-content-between">
   <a href='/' class="navbar-brand"><i class="fas fa-dove"></i> Social Altriusm</a>
   <div>
     <% if current_user %>
       <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle btn btn-primary" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <%= current_user.email %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
