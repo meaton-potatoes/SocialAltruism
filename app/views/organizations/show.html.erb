@@ -1,11 +1,27 @@
 <div class='card'>
   <div class='card-body'>
-    <h1><%= @organization['name'] %></h1>
-    <h3>Total Donated by Users: <%= MoneyHelper.format_amount(Donation.total_donations_for(params[:id])) %></h3>
-    <p><%= link_to 'Donate', new_donation_path(organization_id: @organization['id']) %></p>
-    <p>
-      <%= @organization.inspect %>
-    </p>
+    <div class='row'>
+      <div class='col-md-4'>
+        <img src="<%= @organization['logo_url'] %>">
+      </div>
+      <div class='col-md-8'>
+        <h1><%= @organization['name'] %></h1>
+        <h4><%= link_to 'Website', @organization['website_url'], target: '_blank' %></a></h4>
+      </div>
+    </div>
+    <br>
+    <div class='row'>
+      <div class='col-md-12'>
+        <h3>Total Donations: <%= @stats[:donation_number] %></h3>
+        <h3>Total Donated by Users: <%= MoneyHelper.format_amount(@stats[:sum_donations]) %></h3>
+        <p><%= link_to 'Donate', new_donation_path(organization_id: @organization['id']) %></p>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-12'>
+        <p><%= @organization['mission'] %></p>
+      </div>
+    </div>
   </div>
 </div>
 

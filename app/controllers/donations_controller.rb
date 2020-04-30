@@ -3,6 +3,11 @@ class DonationsController < ApplicationController
 
   def new
     @organization = Pledgeling::Organization.find(params[:organization_id])
+
+    unless @organization['id']
+      flash[:alert] = 'Organization not found'
+      redirect_to organizations_path and return
+    end
     @donation = Donation.new
   end
 
@@ -11,7 +16,7 @@ class DonationsController < ApplicationController
   end
 
   def create
-    @donation = current_user.donations.generate(donation_params)
+    @donation = current_user.donations.new(donation_params)
 
     if @donation.errors.any?
       flash[:alert] = @donation.errors.full_messages.join(', ')

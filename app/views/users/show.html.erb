@@ -1,19 +1,55 @@
 <div class='card'>
   <div class='card-body'>
-    <% if @user == current_user %>
-      <a href='/users/<%= @user.resource_id %>/edit'>Edit</a>
-    <% end %>
-    <h1><i class="fas fa-user-astronaut"></i> <%= @user.nickname %></h1>
-
-    <h3>Total Donations: <%= @user.donations.count %></h3>
-    <h3>Total Amount Donated: <%= MoneyHelper.format_amount(@user.total_donated_amount) %></h3>
-
-    <% if @user == current_user %>
-      <ul>
-        <% @user.donations.each do |donation| %>
-          <li><%= donation.resource_id %></li>
+    <div class='row'>
+      <div class='col-md-11'>
+        <h1><i class="fas fa-user-astronaut"></i>
+          <% if @user.nickname %>
+            <%= @user.nickname %>
+          <% else %>
+            <% if @user == current_user %>
+              <%= link_to 'Set your nickname', edit_user_path(current_user.resource_id) %>
+            <% else %>
+              ???
+            <% end %>
+          <% end %>
+        </h1>
+      </div>
+      <div class='col-md-1'>
+        <% if @user == current_user %>
+          <%= link_to 'Edit', edit_user_path(current_user.resource_id), class: 'btn btn-primary' %>
         <% end %>
-      </ul>
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='col-md-12'>
+        <h1>Stats</h1>
+        <h3>Total Donations: <%= @user.donations.count %></h3>
+        <h3>Total Amount Donated: <%= MoneyHelper.format_amount(@user.total_donated_amount) %></h3>
+      </div>
+    </div>
+
+    <% if @user == current_user %>
+      <br>
+      <div class='private'>
+        <p class='text-muted'>(This is only visible to you)</p>
+        <table class='table'>
+          <thead>
+            <th>Organization</th>
+            <th>Amount</th>
+            <th>Date</th>
+          </thead>
+          <tbody>
+            <% @user.donations.each do |donation| %>
+              <tr>
+                <td><%= donation.pledgeling_organization_name %></td>
+                <td><%= MoneyHelper.format_amount(donation.amount) %></td>
+                <td><%= donation.created_at %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     <% end %>
     
   </div>

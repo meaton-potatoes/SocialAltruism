@@ -6,7 +6,23 @@
         <%= link_to 'View Organizations', organizations_path %>
       </div>
     <% else %>
-      <h1>Welcome</h1>
+      <div class='row'>
+        <div class='col-md-12'>
+          <h1>Welcome</h1>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-12'>
+          <h3>Total Donations: <%= @stats[:donation_number] %></h3>
+          <h3>Total Amount Donated: <%= MoneyHelper.format_amount(@stats[:sum_donations]) %></h3>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-12'>
+          <p>If you want to participate, click to Login button.</p>
+          <p>See which organizations are available to donate to by clicking <%= link_to 'here', organizations_path %></p>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>

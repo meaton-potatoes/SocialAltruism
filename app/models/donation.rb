@@ -1,41 +1,63 @@
 class Donation < ApplicationRecord
-  attr_accessor :email, :first_name, :last_name
+  attr_reader :charge_source, :card
 
   belongs_to :user
+  before_create :set_charge_source!, :submit_to_pledgeling!, :set_resource_id
 
-  before_create :set_resource_id
+  def initialize(params)
+    super(
+      amount: params&.dig(:amount),
+      pledgeling_organization_id: params&.dig(:organization_id)
+    )
+    @card = params&.slice(:card).to_h
+    self
+  end
 
-  def self.generate(params)
-    unless Rails.env.production?
-      params[:card][:number] = '4242424242424242'
-    end
-
-    Donation.new.tap do |donation|
-      stripe_response = Stripe::Token.create(params.slice(:card).to_h)
-      donation.errors[:stripe] << stripe_response.dig('error', 'message') if stripe_response['error']
-
-      pledgeling_response = Pledgeling::Donation.create(
-        charge_source: Rails.env.production? ? stripe_response['id'] : 'tok_visa',
-        email: donation.user.email,
-        first_name: donation.user.first_name,
-        last_name: donation.user.last_name,
-        amount: params[:amount],
-        organization_id: params[:organization_id]
-      )
-      donation.errors[:pledgeling] <<  pledgeling_response['message'] unless pledgeling_response['id']
-
-      donation.currency = pledgeling_response['currency']
-      donation.amount = pledgeling_response['amount'].to_f
-      donation.status = pledgeling_response['status']
-      donation.pledgeling_id = pledgeling_response['id']
-      donation.pledgeling_organization_id = pledgeling_response['organization_id']
-      donation.pledgeling_organization_name = pledgeling_response['organization_name']
+  def set_charge_source!
+    begin
+      @charge_source = Stripe::Token.create(@card).dig('id')
+    rescue => e
+      self.errors[:stripe] << e
     end
   end
 
-  def self.total_donations_for(id)
+  def submit_to_pledgeling!
+    response = Pledgeling::Donation.create(
+      charge_source: charge_source,
+      amount: self.amount.to_f,
+      organization_id: self.pledgeling_organization_id,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name
+    )
+
+    return self.errors[:pledgeling] << response['message'] unless response['id']
+
+    self.currency = response['currency']
+    self.status = response['status']
+    self.pledgeling_id = response['id']
+    self.pledgeling_organization_id = response['organization_id']
+    self.pledgeling_organization_name = response['organization_name']
+  end
+
+  def charge_source
+    Rails.env.production? ? @charge_source : 'tok_visa'
+  end
+
+  def self.stats_for_organization(id)
     donations = Donation.where(pledgeling_organization_id: id)
-    donations.sum(:amount)
+    {
+      donation_number: donations.count,
+      sum_donations: donations.sum(:amount)
+    }
+  end
+
+  def self.total_stats
+    donations = Donation.all
+    {
+      donation_number: donations.count,
+      sum_donations: donations.sum(:amount)
+    }
   end
 
   private

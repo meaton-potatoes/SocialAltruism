@@ -16,14 +16,30 @@
 
 body {
   background: url(background.jpeg); /*https://unsplash.com/photos/Xaanw0s0pMk*/
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
   font-family: 'Raleway', sans-serif;
 }
 
-#organizations tr {
-  border: 1px solid #000;
-  border-radius: 4px;
+#organizations tr img {
+  /*border: 1px solid #000;*/
+  border-radius: 8px;
+  box-shadow: 2px 2px 4px #000;
+  padding: 10px;
 }
 
 #organizations td {
   padding: 10px;
+}
+
+.private {
+  border: 1px solid #000;
+  padding: 10px;
+}
+
+.card {
+  margin: 50px 0;
+  box-shadow: 2px 2px 4px #000;
+  border-radius: 8px;
 }

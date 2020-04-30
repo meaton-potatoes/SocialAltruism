@@ -28,7 +28,8 @@ module Pledgeling
       HTTParty.get(
         "#{BASE_URL}/v1/organizations",
         query: {
-          q: params[:query]
+          q: params[:query],
+          page: params[:page]
         },
         headers: Pledgeling.headers
       )

@@ -19,7 +19,7 @@
           <tr>
             <td><img src='<%= organization['logo_url'] %>'></td>
             <td>
-              <h3><%= organization['name'] %></h3>
+              <h3><%= organization['name'].titlecase %></h3>
               <p><%= organization['mission']&.truncate(300) %></p>
               <p><%= link_to 'Website', organization['website_url'], target: '_blank' %></p>
               <p><%= link_to 'Donate', new_donation_path(organization_id: organization['id']) %></p>
@@ -28,6 +28,21 @@
         <% end %>
       </tbody>
     </table>
-    
+    <div class='row'>
+      <div class='col-md-12' style='text-align: center;'>
+        <h2>
+          <% if @page > 2 %>
+            <%= link_to '<<', organizations_path(@params.merge(page: 1)) %>
+          <% end %>
+          <% if @page > 1 %>
+            <%= link_to "< #{@page - 1}", organizations_path(@params.merge(page: @page - 1)) %>
+          <% end %>
+          <% if @page > 1 && @organizations['total_count'] > @page %> | <% end %>
+          <% if @organizations['total_count'] > @page %>
+            <%= link_to "#{@page + 1} >", organizations_path(@params.merge(page: @page + 1)) %>
+          <% end %>
+        </h2>
+      </div>
+    </div>
   </div>
 </div>
