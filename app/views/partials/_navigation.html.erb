@@ -1,6 +1,9 @@
 <nav class="navbar navbar-dark justify-content-between">
   <a href='/' class="navbar-brand"><i class="fas fa-dove"></i> Social Altriusm</a>
-  <div>
+  <div class='pull-right'>
+    <div class='nav-item'>
+      <%= link_to 'About', about_path, class: 'btn btn-secondary' %>
+    </div>
     <% if current_user %>
       <div class="nav-item dropdown">
         <a class="nav-link dropdown-toggle btn btn-primary" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -11,8 +14,6 @@
           <%= link_to 'Edit Profile', edit_user_path(current_user.resource_id), class: 'dropdown-item' %>
           <%= link_to 'View Organizations', organizations_path, class: 'dropdown-item' %>
           <%= link_to 'Leaderboard', leaderboard_path, class: 'dropdown-item' %>
-          <div class="dropdown-divider"></div>
-          <%= link_to 'About', about_path, class: "dropdown-item" %>
           <div class="dropdown-divider"></div>
           <%= link_to 'Logout', auth_logout_path, class: "dropdown-item" %>
         </div>
