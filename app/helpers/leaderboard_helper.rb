@@ -7,8 +7,10 @@ module LeaderboardHelper
     leaderboard = get_leaderboard(Time.now.utc)
     leaderboard.each_with_index do |(leaderboard_user, amount), i|
       if leaderboard_user == user
-        return "##{i + 1}"
+        return "##{i + 1} Donor this Month"
       end
     end
+
+    nil
   end
 end
