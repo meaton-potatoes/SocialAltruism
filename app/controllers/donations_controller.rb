@@ -9,7 +9,7 @@ class DonationsController < ApplicationController
 
     @organization = Pledgeling::Organization.find(params[:organization_id])
 
-    unless @organization['id']
+    unless @organization
       flash[:alert] = 'Organization not found'
       redirect_to organizations_path and return
     end

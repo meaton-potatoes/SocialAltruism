@@ -7,9 +7,34 @@
   </div>
   <div class='card-body'>
     <% if current_user %>
+      <br>
       <div class='row'>
-        <div class='col-md-12'>
-          <%= link_to 'View Organizations', organizations_path %>
+        <div class='col-4'>
+          <div class="card" style='text-align: center;'>
+            <br>
+            <i class="fas fa-building fa-4x"></i>
+            <div class="card-body">
+              <h5 class="card-title"><a href="<%= organizations_path %>">Discover Organizations</a></h5>
+            </div>
+          </div>
+        </div>
+        <div class='col-4'>
+          <div class="card" style='text-align: center;'>
+            <br>
+            <i class="fas fa-medal fa-4x"></i>
+            <div class="card-body">
+              <h5 class="card-title"><a href="<%= leaderboard_path %>">View Leaderboard</a></h5>
+            </div>
+          </div>
+        </div>
+        <div class='col-4'>
+          <div class="card" style='text-align: center;'>
+            <br>
+            <i class="fas fa-user-astronaut fa-4x"></i>
+            <div class="card-body">
+              <h5 class="card-title"><a href="<%= user_path(current_user.resource_id) %>">My Profile</a></h5>
+            </div>
+          </div>
         </div>
       </div>
     <% else %>

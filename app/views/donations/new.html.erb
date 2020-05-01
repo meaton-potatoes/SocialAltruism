@@ -1,13 +1,28 @@
 <br>
 <div class="card">
-  <div class-></div>
+  <div class='row banner'>
+    <div class='col-md-12'>
+      <h1><i class="fas fa-hand-holding-usd"></i> Make a donation</h1>
+    </div>
+  </div>
   <div class="card-body">
-    <h5 class="card-title">
-      <h1>Make a donation to <u><%= link_to @organization['name'], organization_path(@organization['id']) %></u></h1>
-    </h5>
     <form action="/donations" method="POST" id="payment-form">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="donation[organization_id]" value="<%= params[:organization_id] %>">
+      <div class='row'>
+        <div class='col-md-6'>
+          <label for='organization_name'>
+            Organization
+          </label>
+          <input type="" disabled value="<%= @organization['name'] %>" id='organization_name' class='form-control'>
+        </div>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='amount'>Amount</label>
+            <input type="number" name="donation[amount]" id='amount' step='.01' class='form-control' value="<%= @donation[:amount] %>" required>
+          </div>
+        </div>
+      </div>
       <div class='row'>
         <div class='col-md-6'>
           <div class='form-group'>
@@ -41,16 +56,10 @@
         </div>
       </div>
       <div class='row'>
-        <div class='col-md-6'>
-          <div class='form-group'>
-            <label for='amount'>Amount</label>
-            <input type="number" name="donation[amount]" id='amount' step='.01' class='form-control' value="<%= @donation[:amount] %>" required>
-          </div>
-        </div>
-        <div class='col-md-6'>
+        <div class='col-md-12'>
           <div class='form-group'>
             <label></label>
-            <button class='form-control btn btn-primary' id='donate'>Donate!</button>
+            <button class='form-control btn btn-primary' id='donate'>Donate to <%= @organization['name'] %>!</button>
           </div>
         </div>
       </div>
