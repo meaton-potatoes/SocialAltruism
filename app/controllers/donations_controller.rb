@@ -7,13 +7,16 @@ class DonationsController < ApplicationController
       redirect_to edit_user_path(current_user.resource_id) and return
     end
 
-    @organization = Pledgeling::Organization.find(params[:organization_id])
+    organization = Pledgeling::Organization.find(params[:organization_id])
 
-    unless @organization
+    unless organization['id']
       flash[:alert] = 'Organization not found'
       redirect_to organizations_path and return
     end
-    @donation = Donation.new
+    @donation = Donation.new(
+      pledgeling_organization_id: organization['id'],
+      pledgeling_organization_name: organization['name']
+    )
   end
 
   def show
@@ -27,19 +30,20 @@ class DonationsController < ApplicationController
   def create
     @donation = current_user.donations.new(donation_params)
 
-    if @donation.errors.any?
-      flash[:alert] = @donation.errors.full_messages.join(', ')
-      render :new and return
-    elsif @donation.save!
+    if @donation.save
       flash[:success] = "Your donation of was processed!"
       redirect_to user_path(current_user.resource_id)
+    else
+      flash[:alert] = @donation.errors.full_messages.join(', ')
+      redirect_to new_donation_path(organization_id: @donation.pledgeling_organization_id)
     end
   end
 
   private
   def donation_params
     params.require(:donation).permit(
-      :organization_id,
+      :pledgeling_organization_name,
+      :pledgeling_organization_id,
       :amount,
       card: [
         :number,

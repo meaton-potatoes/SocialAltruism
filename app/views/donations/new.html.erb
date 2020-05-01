@@ -8,13 +8,13 @@
   <div class="card-body">
     <form action="/donations" method="POST" id="payment-form">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-      <input type="hidden" name="donation[organization_id]" value="<%= params[:organization_id] %>">
+      <input type="hidden" name="donation[pledgeling_organization_id]" value="<%= @donation.pledgeling_organization_id %>">
       <div class='row'>
         <div class='col-md-6'>
-          <label for='organization_name'>
+          <label for='pledgeling_organization_name'>
             Organization
           </label>
-          <input type="" disabled value="<%= @organization['name'] %>" id='organization_name' class='form-control'>
+          <input type="" disabled value="<%= @donation.pledgeling_organization_name %>" id='pledgeling_organization_name' class='form-control'>
         </div>
         <div class='col-md-6'>
           <div class='form-group'>
@@ -59,7 +59,7 @@
         <div class='col-md-12'>
           <div class='form-group'>
             <label></label>
-            <button class='form-control btn btn-primary' id='donate'>Donate to <%= @organization['name'] %>!</button>
+            <button class='form-control btn btn-primary' id='donate'>Donate to <%= @donation.pledgeling_organization_name %>!</button>
           </div>
         </div>
       </div>

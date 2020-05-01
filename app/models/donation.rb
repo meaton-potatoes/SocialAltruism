@@ -1,23 +1,20 @@
 class Donation < ApplicationRecord
-  attr_reader :charge_source, :card
+  attr_accessor :stripe_token, :card
 
   belongs_to :user
-  before_create :set_charge_source!, :submit_to_pledgeling!, :set_resource_id
+  before_create :set_resource_id
+  validate :set_stripe_token!, :submit_to_pledgeling!
 
   def initialize(params)
-    super(
-      amount: params&.dig(:amount),
-      pledgeling_organization_id: params&.dig(:organization_id)
-    )
+    super
     @card = params&.slice(:card).to_h
-    self
   end
 
-  def set_charge_source!
+  def set_stripe_token!
     begin
-      @charge_source = Stripe::Token.create(@card).dig('id')
-    rescue => e
-      self.errors[:stripe] << e
+      @stripe_token = Stripe::Token.create(@card)
+    rescue Stripe::CardError => e
+      self.errors[:stripe] << e.message
     end
   end
 
@@ -41,7 +38,7 @@ class Donation < ApplicationRecord
   end
 
   def charge_source
-    Rails.env.production? ? @charge_source : 'tok_visa'
+    @stripe_token&.livemode ? @stripe_token.id : 'tok_visa'
   end
 
   def self.stats_for_organization(id)
