@@ -2,7 +2,7 @@ class DonationsController < ApplicationController
   include Secured
 
   def new
-    unless current_user.first_name && current_user.last_name
+    if current_user.first_name.blank? || current_user.last_name.blank?
       flash[:alert] = 'You must set your first and last name before you can make a donation'
       redirect_to edit_user_path(current_user.resource_id) and return
     end
