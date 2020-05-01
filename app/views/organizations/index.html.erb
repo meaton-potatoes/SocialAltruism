@@ -1,46 +1,48 @@
 <div class='card'>
-  <div class='card-body'>
-    <form action='/organizations' method='get'>
-      <div class='row'>
-        <div class='col-md-6'>
-          <h1>Organizations</h1>
-        </div>
-        <div class='col-md-4'>
-          <input type="text" name="query" class='form-control' value="<%= params[:query] %>">
-        </div>
-        <div class='col-md-1'>
-          <button class='btn btn-primary'>Search</button>
-        </div>
-      </div>
-    </form>
-    <div id='organizations'>
-      <% @organizations['results'].each do |organization| %>
-        <div class='organization row'>
-          <div class='image col-md-4' style='background-image: url(<%= organization['logo_url'] %>);'></div>
-          <div class='col-md-8'>
-            <h3><%= organization['name'].titlecase %></h3>
-            <p><%= organization['mission']&.truncate(300)&.humanize %></p>
-            <p><%= link_to 'Website', organization['website_url'], target: '_blank' %></p>
-            <p><%= link_to 'Donate', new_donation_path(organization_id: organization['id']) %></p>
-          </div>
-        </div>
-      <% end %>
+  <div class='row banner'>
+    <div class='col-md-6'>
+      <h1>Organizations</h1>
     </div>
+    <div class='col-md-6'>
+      <form action='/organizations' method='get' class="form-inline float-right">
+        <div class='form-group'>
+          <input type="text" name="query" class='form-control' value="<%= params[:query] %>">
+          <button class='btn btn-primary' style='margin-left: 10px;'>Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class='card-body'>
     <div class='row'>
       <div class='col-md-12' style='text-align: center;'>
-        <h2>
-          <% if @page > 2 %>
-            <%= link_to '<<', organizations_path(@params.merge(page: 1)) %>
-          <% end %>
-          <% if @page > 1 %>
-            <%= link_to "< #{@page - 1}", organizations_path(@params.merge(page: @page - 1)) %>
-          <% end %>
-          <% if @page > 1 && @organizations['total_count'] > @page %> | <% end %>
-          <% if @organizations['total_count'] > @page %>
-            <%= link_to "#{@page + 1} >", organizations_path(@params.merge(page: @page + 1)) %>
-          <% end %>
-        </h2>
+        <div class='text-muted'><%= @organizations ? number_to_human(@organizations.dig('total_count')) : 0 %> Results</div>
+        <br>
+        <% if @page > 2 %>
+          <%= link_to '<<', organizations_path(@params.merge(page: 1)) %>
+        <% end %>
+        <% if @page > 1 %>
+          <%= link_to "< #{@page - 1}", organizations_path(@params.merge(page: @page - 1)) %>
+        <% end %>
+        <% if @page > 1 && @organizations && @organizations.dig('total_count') > @page * @organizations.dig('per') %><span>...</span><% end %>
+        <% if @organizations && @organizations.dig('total_count') > @page * @organizations.dig('per') %>
+          <%= link_to "#{@page + 1} >", organizations_path(@params.merge(page: @page + 1)) %>
+        <% end %>
       </div>
+    </div>
+    <div id='organizations'>
+      <% if @organizations %>
+        <% @organizations.dig('results').each do |organization| %>
+          <div class='organization row'>
+            <div class='image col-md-4' style='background-image: url(<%= organization['logo_url'] %>);'></div>
+            <div class='col-md-8'>
+              <h3><%= organization['name'].titlecase %></h3>
+              <p><%= organization['mission']&.truncate(300)&.humanize %></p>
+              <p><%= link_to 'Website', organization['website_url'], target: '_blank' %></p>
+              <p><%= link_to 'Donate', new_donation_path(organization_id: organization['id']) %></p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>

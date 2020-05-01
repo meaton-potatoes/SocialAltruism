@@ -18,17 +18,19 @@ module Pledgeling
 
   class Organization
     def self.all
-      HTTParty.get(
+      request = HTTParty.get(
         "#{BASE_URL}/v1/organizations",
         query: {
           per_page: 50
         },
         headers: Pledgeling.headers
-      ).parsed_response
+      )
+
+      request.ok? ? request.parsed_response : nil
     end
 
     def self.where(params)
-      HTTParty.get(
+      request = HTTParty.get(
         "#{BASE_URL}/v1/organizations",
         query: {
           q: params[:query],
@@ -37,13 +39,17 @@ module Pledgeling
         },
         headers: Pledgeling.headers
       )
+
+      request.ok? ? request.parsed_response : nil
     end
 
     def self.find(id)
-      HTTParty.get(
+      request = HTTParty.get(
         "#{BASE_URL}/v1/organizations/#{id}",
         headers: Pledgeling.headers
-      ).parsed_response
+      )
+
+      request.ok? ? request.parsed_response : nil
     end
   end
 end

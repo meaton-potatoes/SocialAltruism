@@ -1,6 +1,10 @@
 <div class='card'>
+  <div class='row banner'>
+    <div class='col-md-12'>
+      <h1><i class="fas fa-user-edit"></i> Edit Profile</h1>
+    </div>
+  </div>
   <div class='card-body'>
-    <h1>Edit Profile</h1>
     <form action="<%= user_path(current_user.resource_id) %>" method='post'>
       <input type="hidden" name="_method" value="put" />
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">

@@ -1,20 +1,31 @@
 <div class='card'>
-  <br>
-  <div class='row' style='background: darkorange;'>
-    <h3>
-      Charitable Donations + Gamifications = Increase Goodwill (??)
-    </h3>
+  <div class='row banner'>
+    <h1>About</h1>
   </div>
   <div class='card-body'>
-      This application uses <a href='https://stripe.com/'>Stripe</a> to process payments and then the token that is returned from Stripe is submitted to <a href='https://www.pledgeling.com/'>Pledgeling</a> to allow for secure payment processing.
+    <p>
+      <b>Who is the developer?</b> <a href='http://www.melissaeaton.me'>Melissa Eaton</a>
     </p>
     <p>
-      <b>
-        At no point in your experience will this app ever store your PII, beyond your full name and email. If you'd like to audit for yourself, the source code is linked below.
-      </b>
+      <b>What is this?</b> Maybe it's just me, but I have always wanted to be a more charitable person but I end up procrastinating or forgetting in the chaos of everyday life. But I never forget to check Reddit, Twitter, or Instagram. So the simple idea of this app is just "gamified donations". Make donating money easy and fun. Be encouraged to be more of a philanthropist by seeing other peoples' donations and vise versa. Lets have a good kind of social media competition that improves the world!
+    </p>
+    <p>
+      <b>Why should I trust you with my credit card information?</b> You don't need to. On the first day I thought this up, I knew that I did not want to have to worry about storing users' credit card information, so I found a way around it.
+      <ul>
+        <li>You make your donation through this app</li>
+        <li>We send your credit card number, expiration date, and cvc to <a href='https://stripe.com/'>Stripe</a></li>
+        <li>Stripe returns a token representation of your credit card</li>
+        <li>We send this stripe token, along with your first name, last name, and email to <a href='https://www.pledgeling.com/'>Pledgeling</a></li>
+        <li>You should receive an email from Pledgeling once your donation has been processed</li>
+        <li>
+          <b>
+            At no point will this app ever store your credit card information. If you'd like to audit for yourself, the source code is linked below.
+          </b>
+        </li>
+      </ul>
     </p>
     <div class='row'>
-      <div class='col-md-4'><a href='http://www.melissaeaton.me'><i class="fas fa-external-link-alt"></i> My Personal Website</a></div>
+      <div class='col-md-4'><a href='http://www.melissaeaton.me'><i class="fas fa-globe"></i> My Personal Website</a></div>
       <div class='col-md-4'><a href='https://twitter.com/AltruismSocial'><i class="fab fa-twitter"></i> Twitter</a></div>
       <div class='col-md-4'><a href='https://github.com/meaton-potatoes/SocialAltruism' target='_blank'><i class="fab fa-github"></i> Github Repository</a></div>
     </p>

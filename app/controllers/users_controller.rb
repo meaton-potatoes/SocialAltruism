@@ -23,7 +23,13 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @user = User.find_by(resource_id: params[:id])
+    unless @user && @user == current_user
+      flash[:alert] = 'You don\'t have permission to view this page.'
+      redirect_to root_path and return
+    end
+  end
 
   def update
     if current_user.update_attributes(user_params)
@@ -35,7 +41,7 @@ class UsersController < ApplicationController
 
   def leaderboard
     @date = params[:date] ? Date.parse(params[:date]) : DateTime.now.utc
-    @ranked_donations = Donation.where(created_at: @date.beginning_of_month..@date.end_of_month).group(:user).sum(:amount).sort { |x, y| y.last <=> x.last }
+    @ranked_donations = LeaderboardHelper.get_leaderboard(@date)
   end
 
   private

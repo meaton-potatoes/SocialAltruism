@@ -14,6 +14,10 @@ class User < ApplicationRecord
     donations.where(created_at: date.beginning_of_month..date.end_of_month).sum(:amount) >= monthly_goal
   end
 
+  def formatted_nickname
+    self.nickname || '???'
+  end
+
   private
   def set_resource_id
     self.resource_id ||= SecureRandom.hex(18)

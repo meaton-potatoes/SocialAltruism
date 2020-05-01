@@ -1,13 +1,8 @@
 class OrganizationsController < ApplicationController
   def index
     @params = organization_params.to_h
-    @page = organization_params[:page]
-    if organization_params.to_h.any?
-      @organizations = Pledgeling::Organization.where(organization_params.to_h)
-    else
-      @organizations = Pledgeling::Organization.all
-    end
-    @page = @organizations['page'] || 1
+    @organizations = Pledgeling::Organization.where(organization_params.to_h)
+    @page = @organizations&.dig('page') || 1
   end
 
   def show

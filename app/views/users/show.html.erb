@@ -1,21 +1,13 @@
 <div class='card'>
-  <br>
-  <div class='row' style='background: darkorange;'>
-    <div class='col-md-12'>
+  <div class='row banner'>
+    <div class='col-md-7'>
       <h1>
-        <span>
-          <i class="fas fa-user-astronaut"></i>
-        </span>
-        <% if @user.nickname && !@user.nickname.empty? %>
-          <%= @user.nickname %>'s Profile
-        <% else %>
-          <% if @user == current_user %>
-            <%= link_to 'Set your nickname', edit_user_path(current_user.resource_id) %>
-          <% else %>
-            ???'s Profile
-          <% end %>
-        <% end %>
+        <i class="fas fa-user-astronaut"></i>
+        <%= @user.formatted_nickname %>'s Profile
       </h1>
+    </div>
+    <div class='col-md-5'>
+      <h1><%= LeaderboardHelper.find_user_position(@user) %> Donor this Month</h1>
     </div>
   </div>
   <div class='card-body'>
@@ -32,19 +24,23 @@
               <% if @user == current_user %>
                 You have <%= pluralize(Time.now.end_of_month.day - Time.now.day, 'day') %> left to meet your goal
               <% else %>
-                <%= @user.nickname %> has <%= pluralize(Time.now.end_of_month.day - Time.now.day, 'day') %> left to meet their goal
+                <%= @user.formatted_nickname %> has <%= pluralize(Time.now.end_of_month.day - Time.now.day, 'day') %> left to meet their goal
               <% end %>
             </h3>
           <% else %>
             <% if @user == current_user %>
               You met your goal! 
             <% else %>
-              <%= @user.nickname %> met their goal!
+              <%= @user.formatted_nickname %> met their goal!
             <% end %>
           <% end %>
         </div>
         <div class='col-md-1'>
           <div id='thermometer' style='background: <%= MoneyHelper.thermometer(@user) %>;'></div>
+        </div>
+      <% else %>
+        <div class='col-md-6'>
+          <%= @user == current_user ? "#{@user.formatted_nickname} hasn't" : "You haven't" %> hasn't set a monthly goal yet.
         </div>
       <% end %>
     </div>
