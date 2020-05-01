@@ -4,12 +4,56 @@
     <form action="<%= user_path(current_user.resource_id) %>" method='post'>
       <input type="hidden" name="_method" value="put" />
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-      <div class='form-group'>
-        <label for='nickname'>Nickname</label>
-        <input type="text" name="user[nickname]" value='<%= current_user.nickname %>' class='form-control'>
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='first_name'>First Name (required to make a donation)</label>
+            <input type="text" name="user[first_name]" value='<%= current_user.first_name %>' class='form-control'>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='last_name'>Last Name (required to make a donation)</label>
+            <input type="text" name="user[last_name]" value='<%= current_user.last_name %>' class='form-control'>
+          </div>
+        </div>
       </div>
-      
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='nickname'>Nickname (This will be visible on your profile)</label>
+            <input type="text" name="user[nickname]" value='<%= current_user.nickname %>' class='form-control'>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for="monthly_goal">Monthly Goal</label>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">$</div>
+              </div>
+              <input type="text" class="form-control" id="monthly_goal" name='user[monthly_goal]' value="<%= number_with_precision(current_user.monthly_goal, precision: 2) %>" step='.01'>
+            </div>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          <div class='form-group'>
+            <label for='privacy_level'>Who can see your profile?</label>
+            <select id='privacy_level' name='user[privacy_level]' class='form-control'>
+              <% User.privacy_levels.each do |level| %>
+                <option value='<%= level.first %>' <% if current_user.privacy_level == level.first %>selected<% end %>><%= level.first.humanize %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+      </div>      
       <button class='btn btn-primary'>Update</button>
+      <%= link_to 'Cancel', user_path(current_user.resource_id), class: 'btn btn-outline-secondary' %>
     </form>
   </div>
 </div>

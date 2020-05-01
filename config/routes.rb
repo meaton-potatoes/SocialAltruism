@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :organizations
   resources :users
 
+  get 'leaderboard' => 'users#leaderboard'
   get 'about' => 'static#about'
 
   get 'auth/auth0/callback' => 'auth0#callback'

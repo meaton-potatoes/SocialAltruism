@@ -1,32 +1,52 @@
 <div class='card'>
+  <br>
+  <div class='row' style='background: darkorange;'>
+    <div class='col-md-12'>
+      <h1>
+        <span>
+          <i class="fas fa-user-astronaut"></i>
+        </span>
+        <% if @user.nickname && !@user.nickname.empty? %>
+          <%= @user.nickname %>'s Profile
+        <% else %>
+          <% if @user == current_user %>
+            <%= link_to 'Set your nickname', edit_user_path(current_user.resource_id) %>
+          <% else %>
+            ???'s Profile
+          <% end %>
+        <% end %>
+      </h1>
+    </div>
+  </div>
   <div class='card-body'>
     <div class='row'>
-      <div class='col-md-11'>
-        <h1><i class="fas fa-user-astronaut"></i>
-          <% if @user.nickname %>
-            <%= @user.nickname %>
+      <div class='col-md-6'>
+        <h2>Total Donations: <%= @user.donations.count %></h2>
+        <h2>Total Amount Donated: <%= MoneyHelper.format_amount(@user.total_donated_amount) %></h2>
+      </div>
+      <% if @user.monthly_goal %>
+        <div class='col-md-5'>
+          <h2>Monthly Goal: <%= MoneyHelper.format_amount(@user.monthly_goal) %></h2>
+          <% unless @user.monthly_goal_met? %>
+            <h3>
+              <% if @user == current_user %>
+                You have <%= pluralize(Time.now.end_of_month.day - Time.now.day, 'day') %> left to meet your goal
+              <% else %>
+                <%= @user.nickname %> has <%= pluralize(Time.now.end_of_month.day - Time.now.day, 'day') %> left to meet their goal
+              <% end %>
+            </h3>
           <% else %>
             <% if @user == current_user %>
-              <%= link_to 'Set your nickname', edit_user_path(current_user.resource_id) %>
+              You met your goal! 
             <% else %>
-              ???
+              <%= @user.nickname %> met their goal!
             <% end %>
           <% end %>
-        </h1>
-      </div>
-      <div class='col-md-1'>
-        <% if @user == current_user %>
-          <%= link_to 'Edit', edit_user_path(current_user.resource_id), class: 'btn btn-primary' %>
-        <% end %>
-      </div>
-    </div>
-    
-    <div class='row'>
-      <div class='col-md-12'>
-        <h1>Stats</h1>
-        <h3>Total Donations: <%= @user.donations.count %></h3>
-        <h3>Total Amount Donated: <%= MoneyHelper.format_amount(@user.total_donated_amount) %></h3>
-      </div>
+        </div>
+        <div class='col-md-1'>
+          <div id='thermometer' style='background: <%= MoneyHelper.thermometer(@user) %>;'></div>
+        </div>
+      <% end %>
     </div>
 
     <% if @user == current_user %>
@@ -38,14 +58,30 @@
             <th>Organization</th>
             <th>Amount</th>
             <th>Date</th>
+            <th></th>
           </thead>
           <tbody>
-            <% @user.donations.each do |donation| %>
-              <tr>
-                <td><%= donation.pledgeling_organization_name %></td>
-                <td><%= MoneyHelper.format_amount(donation.amount) %></td>
-                <td><%= donation.created_at %></td>
-              </tr>
+            <% if @user.donations.any? %>
+              <% @user.donations.each do |donation| %>
+                <tr>
+                  <td><%= link_to donation.pledgeling_organization_name, organization_path(donation.pledgeling_organization_id) %></td>
+                  <td><%= MoneyHelper.format_amount(donation.amount) %></td>
+                  <td><%= donation.created_at.to_date %></td>
+                  <% if donation.created_at.today? %>
+                    <td>
+                      <a  class="btn btn-primary btn-sm"
+                          style='background-color: #1b95e0;'
+                          href="<%= SocialHelper.tweet_button_url(donation) %>"
+                          target="_blank"
+                        >
+                        <i class="fab fa-twitter"></i> Tweet
+                      </a>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr><td class='text-muted'>You haven't made any donations yet.</td></tr>
             <% end %>
           </tbody>
         </table>

@@ -2,6 +2,11 @@ class DonationsController < ApplicationController
   include Secured
 
   def new
+    unless current_user.first_name && current_user.last_name
+      flash[:alert] = 'You must set your first and last name before you can make a donation'
+      redirect_to edit_user_path(current_user.resource_id) and return
+    end
+
     @organization = Pledgeling::Organization.find(params[:organization_id])
 
     unless @organization['id']
@@ -13,6 +18,10 @@ class DonationsController < ApplicationController
 
   def show
     @donation = Donation.find_by(resource_id: params[:id])
+    unless @donation && @donation.user == current_user
+      flash[:alert] = 'You cannot view that donation'
+      redirect_to root_path and return
+    end
   end
 
   def create
@@ -23,12 +32,8 @@ class DonationsController < ApplicationController
       render :new and return
     elsif @donation.save!
       flash[:success] = "Your donation of was processed!"
-      redirect_to donation_path(@donation.resource_id)
+      redirect_to user_path(current_user.resource_id)
     end
-  end
-
-  def index
-    
   end
 
   private

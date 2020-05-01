@@ -1,0 +1,38 @@
+<div class='card'>
+  <br>
+  <div class='row' style='background: darkorange;'>
+    <div class='col-md-12'>
+      <h1>Top donors for <%= @date.strftime("%B %Y") %></h1>
+    </div>
+  </div>
+  <div class='card-body'>
+    <table class='table'>
+      <thead>
+        <th>User</th>
+        <th>Amount Donated</th>
+      </thead>
+      <tbody>
+        <% @ranked_donations.each do |user, total| %>
+          <tr>
+            <td>
+              <a href="<%= user_path(user.resource_id) %>">
+                <% if user == current_user %>
+                  You
+                <% else %>
+                  <% if user.nickname.present? %>
+                    <%= user.nickname %>
+                  <% else %>
+                    ???
+                  <% end %>
+                <% end %>
+              </a>
+            </td>
+            <td>
+              <%= MoneyHelper.format_amount(total) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

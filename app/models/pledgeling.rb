@@ -20,6 +20,9 @@ module Pledgeling
     def self.all
       HTTParty.get(
         "#{BASE_URL}/v1/organizations",
+        query: {
+          per_page: 50
+        },
         headers: Pledgeling.headers
       ).parsed_response
     end
@@ -29,6 +32,7 @@ module Pledgeling
         "#{BASE_URL}/v1/organizations",
         query: {
           q: params[:query],
+          per_page: 50,
           page: params[:page]
         },
         headers: Pledgeling.headers

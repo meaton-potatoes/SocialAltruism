@@ -13,21 +13,19 @@
         </div>
       </div>
     </form>
-    <table id='organizations'>
-      <tbody>
-        <% @organizations['results'].each do |organization| %>
-          <tr>
-            <td><img src='<%= organization['logo_url'] %>'></td>
-            <td>
-              <h3><%= organization['name'].titlecase %></h3>
-              <p><%= organization['mission']&.truncate(300) %></p>
-              <p><%= link_to 'Website', organization['website_url'], target: '_blank' %></p>
-              <p><%= link_to 'Donate', new_donation_path(organization_id: organization['id']) %></p>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <div id='organizations'>
+      <% @organizations['results'].each do |organization| %>
+        <div class='organization row'>
+          <div class='image col-md-4' style='background-image: url(<%= organization['logo_url'] %>);'></div>
+          <div class='col-md-8'>
+            <h3><%= organization['name'].titlecase %></h3>
+            <p><%= organization['mission']&.truncate(300)&.humanize %></p>
+            <p><%= link_to 'Website', organization['website_url'], target: '_blank' %></p>
+            <p><%= link_to 'Donate', new_donation_path(organization_id: organization['id']) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
     <div class='row'>
       <div class='col-md-12' style='text-align: center;'>
         <h2>
