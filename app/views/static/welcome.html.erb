@@ -7,9 +7,8 @@
   </div>
   <div class='card-body'>
     <% if current_user %>
-      <br>
       <div class='row'>
-        <div class='col-4'>
+        <div class='col-md-4'>
           <div class="card" style='text-align: center;'>
             <br>
             <i class="fas fa-building fa-4x"></i>
@@ -18,7 +17,7 @@
             </div>
           </div>
         </div>
-        <div class='col-4'>
+        <div class='col-md-4'>
           <div class="card" style='text-align: center;'>
             <br>
             <i class="fas fa-medal fa-4x"></i>
@@ -27,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div class='col-4'>
+        <div class='col-md-4'>
           <div class="card" style='text-align: center;'>
             <br>
             <i class="fas fa-user-astronaut fa-4x"></i>
@@ -40,21 +39,48 @@
     <% else %>
       <div class='row'>
         <div class='col-md-12'>
-          <h3>Total Donations: <%= @stats[:donation_number] %></h3>
-          <h3>Total Amount Donated: <%= MoneyHelper.format_amount(@stats[:sum_donations]) %></h3>
+          <div class="card" style='text-align: center;'>
+            <br>
+            <i class="fas fa-rocket fa-4x"></i>
+            <div class="card-body">
+              <h5>Total Donations: <%= @stats[:donation_number] %></h5>
+              <h5>Total Amount Donated: <%= MoneyHelper.format_amount(@stats[:sum_donations]) %></h5>
+            </div>
+          </div>
         </div>
       </div>
       <div class='row'>
-        <div class='col-md-12'>
-          <p>If you want to participate, click the Login button.</p>
-          <p>See which organizations are available to donate to by clicking <%= link_to 'here', organizations_path %></p>
+        <div class='col-md-4'>
+          <div class="card" style='text-align: center;'>
+            <br>
+            <i class="fas fa-info-circle fa-4x"></i>
+            <div class="card-body">
+              <h5 class="card-title">Where am I?</h5>
+              <a href="<%= about_path %>" class="btn btn-primary">Find out.</a>
+            </div>
+          </div>
+        </div>
+        <div class='col-md-4'>
+          <div class="card" style='text-align: center;'>
+            <br>
+            <i class="fas fa-hand-holding-heart fa-4x"></i>
+            <div class="card-body">
+              <h5 class="card-title">Where's the "altruism"?</h5>
+              <a href="<%= organizations_path %>" class="btn btn-primary">Discover organizations.</a>
+            </div>
+          </div>
+        </div>
+        <div class='col-md-4'>
+          <div class="card" style='text-align: center;'>
+            <br>
+            <i class="fas fa-medal fa-4x"></i>
+            <div class="card-body">
+              <h5 class="card-title">Where's the "social"?</h5>
+              <a href="<%= leaderboard_path %>" class="btn btn-primary">Start here with the leaderboard.</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class='row'>
-        <div class='col-md-12'>
-          <%= link_to 'About', about_path %>
-        </div>
-      </div>
-  <% end %>
+    <% end %>
   </div>
 </div>
