@@ -5,6 +5,11 @@ class Donation < ApplicationRecord
   before_create :set_resource_id
   validate :set_stripe_token!, :submit_to_pledgeling!
 
+  scope :live, -> { where(live: true) }
+  scope :test, -> { where(live: false) }
+
+  TEST_STRIPE_TOKEN = 'tok_visa'
+
   def initialize(params)
     super
     @card = params&.slice(:card).to_h
@@ -13,6 +18,7 @@ class Donation < ApplicationRecord
   def set_stripe_token!
     begin
       @stripe_token = Stripe::Token.create(@card)
+      self.live = @stripe_token.livemode
     rescue Stripe::CardError => e
       self.errors[:stripe] << e.message
     end
@@ -20,7 +26,7 @@ class Donation < ApplicationRecord
 
   def submit_to_pledgeling!
     response = Pledgeling::Donation.create(
-      charge_source: charge_source,
+      charge_source: (self.live ? @stripe_token.id : TEST_STRIPE_TOKEN),
       amount: self.amount.to_f,
       organization_id: self.pledgeling_organization_id,
       email: user.email,
@@ -35,10 +41,6 @@ class Donation < ApplicationRecord
     self.pledgeling_id = response['id']
     self.pledgeling_organization_id = response['organization_id']
     self.pledgeling_organization_name = response['organization_name']
-  end
-
-  def charge_source
-    @stripe_token&.livemode ? @stripe_token.id : 'tok_visa'
   end
 
   def self.stats_for_organization(id)
@@ -59,6 +61,6 @@ class Donation < ApplicationRecord
 
   private
   def set_resource_id
-    self.resource_id ||= SecureRandom.hex(18)
+    self.resource_id ||= SecureRandom.hex(12)
   end
 end

@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   private
   def set_resource_id
-    self.resource_id ||= SecureRandom.hex(18)
+    self.resource_id ||= SecureRandom.hex(12)
   end
 
   def set_nickname

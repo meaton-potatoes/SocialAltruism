@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2020_04_29_150053) do
     t.string "pledgeling_id", null: false
     t.string "pledgeling_organization_id", null: false
     t.string "pledgeling_organization_name", null: false
+    t.boolean "live"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -9,6 +9,7 @@ class CreateDonations < ActiveRecord::Migration[5.2]
       t.string :pledgeling_id, null: false
       t.string :pledgeling_organization_id, null: false
       t.string :pledgeling_organization_name, null: false
+      t.boolean :live, null: true
       t.timestamps
     end
   end

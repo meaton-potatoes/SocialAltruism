@@ -1,6 +1,6 @@
 module LeaderboardHelper
   def self.get_leaderboard(date)
-    Donation.where(created_at: date.beginning_of_month..date.end_of_month).group(:user).sum(:amount).sort { |x, y| y.last <=> x.last }
+    Donation.live.where(created_at: date.beginning_of_month..date.end_of_month).group(:user).sum(:amount).sort { |x, y| y.last <=> x.last }
   end
 
   def self.find_user_position(user)
