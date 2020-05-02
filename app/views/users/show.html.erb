@@ -71,8 +71,8 @@
                   <td><%= link_to donation.pledgeling_organization_name, organization_path(donation.pledgeling_organization_id) %></td>
                   <td><%= MoneyHelper.format_amount(donation.amount) %></td>
                   <td><%= donation.created_at.to_date %></td>
-                  <% if donation.created_at.today? %>
-                    <td>
+                  <td>
+                    <% if donation.live? && donation.created_at.today? %>
                       <a  class="btn btn-primary btn-sm"
                           style='background-color: #1b95e0;'
                           href="<%= SocialHelper.tweet_button_url(donation) %>"
@@ -80,8 +80,8 @@
                         >
                         <i class="fab fa-twitter"></i> Tweet
                       </a>
-                    </td>
-                  <% end %>
+                    <% end %>
+                  </td>
                 </tr>
               <% end %>
             <% else %>
