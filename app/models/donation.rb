@@ -25,30 +25,22 @@ class Donation < ApplicationRecord
   end
 
   def submit_to_pledgeling!
-    response = Pledgeling::Donation.create(
+    response = Pledgeling.post('/v1/donations', {
       charge_source: (self.live ? @stripe_token.id : TEST_STRIPE_TOKEN),
       amount: self.amount.to_f,
       organization_id: self.pledgeling_organization_id,
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name
-    )
-
-    return self.errors[:pledgeling] << response['message'] unless response['id']
+    })
+    
+    return self.errors[:pledgeling] << response['message'] unless response
 
     self.currency = response['currency']
     self.status = response['status']
     self.pledgeling_id = response['id']
     self.pledgeling_organization_id = response['organization_id']
     self.pledgeling_organization_name = response['organization_name']
-  end
-
-  def self.stats_for_organization(id)
-    donations = Donation.where(pledgeling_organization_id: id)
-    {
-      donation_number: donations.count,
-      sum_donations: donations.sum(:amount)
-    }
   end
 
   def self.total_stats

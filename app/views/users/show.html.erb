@@ -52,45 +52,45 @@
         </div>
       </div>
     </div>
-
-    <% if @user == current_user %>
-      <br>
-      <div class='private'>
-        <p class='text-muted'>(This is only visible to you)</p>
-        <table class='table'>
-          <thead>
-            <th>Organization</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th></th>
-          </thead>
-          <tbody>
-            <% if @user.donations.any? %>
-              <% @user.donations.each do |donation| %>
-                <tr>
-                  <td><%= link_to donation.pledgeling_organization_name, organization_path(donation.pledgeling_organization_id) %></td>
-                  <td><%= MoneyHelper.format_amount(donation.amount) %></td>
-                  <td><%= donation.created_at.to_date %></td>
-                  <td>
-                    <% if donation.live? && donation.created_at.today? %>
-                      <a  class="btn btn-primary btn-sm"
-                          style='background-color: #1b95e0;'
-                          href="<%= SocialHelper.tweet_button_url(donation) %>"
-                          target="_blank"
-                        >
-                        <i class="fab fa-twitter"></i> Tweet
-                      </a>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            <% else %>
-              <tr><td class='text-muted'>You haven't made any donations yet.</td></tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-    
   </div>
 </div>
+<% if @user == current_user %>
+  <div class='card'>
+    <div class='card-body'>
+      <h3 class='text-muted'>Admin (This is only visible to you)</h3>
+      <br>
+      <table class='table'>
+        <thead>
+          <th>Organization</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <% if @user.donations.any? %>
+            <% @user.donations.each do |donation| %>
+              <tr>
+                <td><%= link_to donation.pledgeling_organization_name, organization_path(donation.pledgeling_organization_id) %></td>
+                <td><%= MoneyHelper.format_amount(donation.amount) %></td>
+                <td><%= donation.created_at.to_date %></td>
+                <td>
+                  <% if donation.live? && donation.created_at.today? %>
+                    <a  class="btn btn-primary btn-sm"
+                        style='background-color: #1b95e0;'
+                        href="<%= SocialHelper.tweet_button_url(donation) %>"
+                        target="_blank"
+                      >
+                      <i class="fab fa-twitter"></i> Tweet
+                    </a>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr><td class='text-muted'>You haven't made any donations yet.</td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

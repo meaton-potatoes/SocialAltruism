@@ -1,0 +1,10 @@
+<div id='root'></div>
+
+<script type="text/javascript">
+  window.currentUser = {
+    id: "<%= current_user.resource_id %>",
+    email: "<%= current_user.email %>"
+  }
+  window.apiUrl = '<%= ENV['API_URL'] %>'
+</script>
+<%= javascript_pack_tag 'router' %>
