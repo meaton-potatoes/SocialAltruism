@@ -1,15 +1,22 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-dom';
 import { getUser, updateUser } from 'utils'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { Profile, Spinner } from 'components'
+
+const PRIVACY_OPTIONS = {
+  everyone: 'Everyone',
+  users: 'Only registered in users',
+  friends: 'Only friends',
+  only_me: 'Only me'
+}
 
 class ProfileForm extends Component {
   constructor(){
     super()
     this.state = {
       loading: true,
-      user: {}
+      user: {},
+      submissionResponse: {}
     }
   }
 
@@ -27,18 +34,21 @@ class ProfileForm extends Component {
     e.preventDefault()
 
     const { user } = this.state
-    updateUser(user).then(({ message, success }) => {
-      debugger
-      if (success) {
-        return <Redirect to={Profile} message={message} />
-      } else {
-        this.setState({ errors: message })
-      }
+    updateUser(user).then(response => {
+      this.setState({submissionResponse: response})
     })
   }
 
   formatBody() {
-    const { user } = this.state
+    const { user, submissionResponse } = this.state
+
+    if (submissionResponse) {
+      const { success, message } = submissionResponse
+      if (success) {
+        return <Redirect to={`/users/${user.id}`} message={message} />
+      }
+    }
+
     return (
       <form>
         <div className='row'>
@@ -81,11 +91,6 @@ class ProfileForm extends Component {
             </div>
           </div>
           <div className='col-md-6'>
-            
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-md-6'>
             <div className='form-group'>
               <label htmlFor="monthly_goal">Monthly Goal</label>
               <div className="input-group mb-2">
@@ -103,25 +108,32 @@ class ProfileForm extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className='row'>
           <div className='col-md-6'>
             <div className='form-group'>
               <label htmlFor='privacy_level'>Who can see your profile?</label>
               <select id='privacy_level' name='user[privacy_level]' className='form-control' onChange={(e) => this.handleChange(e)}>
-                { ['everyone', 'users', 'friends', 'only_me'].map((option, i) => <option key={option} value={i}>{option}</option>) }
+                { Object.keys(PRIVACY_OPTIONS).map(key => <option key={key} value={key}>{PRIVACY_OPTIONS[key]}</option>) }
               </select>
             </div>
           </div>
         </div>
+        <br />
         <div className='row'>
-          <button className='btn btn-primary' onClick={(e) => this.handleSubmit(e)}>Update</button>
-          <Link to={`/users/${currentUser.id}`} className='btn btn-outline-secondary'>Cancel</Link>
+          <div className='col-md-6'>
+            <button className='btn btn-primary form-control' onClick={(e) => this.handleSubmit(e)}>Update</button>
+          </div>
+          <div className='col-md-6'>
+            <Link to={`/users/${currentUser.id}`} className='btn btn-outline-secondary form-control'>Cancel</Link>
+          </div>
         </div>
       </form>
     )
   }
 
   render(){
-    const { loading, errors } = this.state
+    const { loading } = this.state
     return (
       <div className='card'>
         <div className='row banner'>
@@ -130,7 +142,6 @@ class ProfileForm extends Component {
           </div>
         </div>
         <div className='card-body'>
-          { errors && <p style={{color: 'red'}}>{ errors }</p> }
           { loading ? <Spinner /> : this.formatBody() }
         </div>
       </div>

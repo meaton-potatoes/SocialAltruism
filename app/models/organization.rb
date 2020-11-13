@@ -1,5 +1,7 @@
+require 'pledgeling'
+
 class Organization
-  PER_PAGE = 50
+  PER_PAGE = 25
   PLEDGELING_DEFAULT_LOGO = 'https://res.cloudinary.com/pledgeling/w_266%2Ch_266%2Cc_fit/stg-media/images%2Fnpos%2Flogos%2Fdefault%2Flogo.jpg'
   STRUCT_FIELDS = [:id, :name, :website_url, :mission, :logo_url, :street1, :street2, :city, :region, :postal_code, :country, :lat, :lon]
 
@@ -10,7 +12,8 @@ class Organization
       page: params&.dig(:page)
     })
 
-    parsed_response['results'].map { |result| Struct.convert(result) }
+    parsed_response['results'] = parsed_response['results'].map { |result| Struct.convert(result) }
+    parsed_response
   end
 
   def self.all
@@ -23,10 +26,6 @@ class Organization
   end
 
   Struct = Struct.new(*STRUCT_FIELDS, keyword_init: true) do
-    def has_default_logo?
-      logo_url == PLEDGELING_DEFAULT_LOGO
-    end
-
     def address
       [
         street1,
@@ -40,6 +39,10 @@ class Organization
 
     def coordinates
       [lat, lon] if lat && lon
+    end
+
+    def logo_uri
+      logo_url || PLEDGELING_DEFAULT_LOGO
     end
 
     def stats

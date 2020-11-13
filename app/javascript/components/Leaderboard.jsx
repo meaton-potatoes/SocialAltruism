@@ -57,7 +57,7 @@ class Leaderboard extends Component {
       <div className='card'>
         <div className='row banner'>
           <div className='col-md-12'>
-            <h1><i className="fas fa-medal" /> Top donors for {MONTHS[date.getMonth()]} {date.getDate()}</h1>
+            <h1><i className="fas fa-medal" /> Top donors for {MONTHS[date.getMonth()]}</h1>
           </div>
         </div>
         <div className='card-body'>

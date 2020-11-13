@@ -16,7 +16,7 @@ class Welcome extends Component {
 
   render() {
     const { stats } = this.state
-    if (!currentUser) {
+    if (currentUser) {
       const { nickname, id } = currentUser
       return (
         <div className='card'>
@@ -32,7 +32,7 @@ class Welcome extends Component {
                   <br />
                   <i className="fas fa-rocket fa-4x" />
                   <div className='card-body'>
-                    { Object.keys(stats).map(key => <h5>{key}: {stats[key]}</h5>) }
+                    { Object.keys(stats).map(key => <h5 key={key}>{key}: {stats[key]}</h5>) }
                   </div>
                 </div>
               </div>

@@ -4,6 +4,11 @@ import { getUser } from 'utils'
 import * as _ from 'lodash'
 import { Spinner } from 'components'
 
+const formatDate = str => {
+  const date = new Date(str)
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+}
+
 class Profile extends Component {
   constructor() {
     super()
@@ -15,11 +20,19 @@ class Profile extends Component {
 
   componentDidMount() {
     const { user_id } = this.props.match.params
-    getUser(user_id).then(({ user }) => this.setState({ user, loading: false }))
+
+    getUser(user_id).then(
+      ({ user }) => this.setState({ user, loading: false }), // success
+      ({ message }) => this.setState({errors: message, loading: false}) // failure
+    )
   }
 
   formatBody() {
     const { user, user: { stats, nickname } } = this.state
+    if (!user) {
+      return
+    }
+
     return (
       <div className='row'>
         <div className='col-md-6'>
@@ -28,7 +41,7 @@ class Profile extends Component {
             <i className="fas fa-rocket fa-4x"></i>
             <div className="card-body">
               <h5>Total Donations: { stats.total_donations }</h5>
-              <h5>Total Amount Donated: ${ (stats.total_amount_donated || 0).toFixed(2) }</h5>
+              <h5>Total Amount Donated: ${stats.total_amount_donated}</h5>
             </div>
           </div>
         </div>
@@ -39,7 +52,7 @@ class Profile extends Component {
             <div className="card-body">
               { user.monthly_goal &&
                 <React.Fragment>
-                  <h5>Monthly Goal: ${ user.monthly_goal.toFixed(2) }</h5>
+                  <h5>Monthly Goal: ${user.monthly_goal}</h5>
                   <div className="progress">
                     <div  className="progress-bar progress-bar-striped progress-bar-animated bg-info"
                           role="progressbar"
@@ -76,9 +89,6 @@ class Profile extends Component {
 
   adminView() {
     const { loading, user, user: { donations } } = this.state
-    if (loading) {
-      return
-    }
 
     if (user.id == currentUser.id) {
       return (
@@ -101,7 +111,7 @@ class Profile extends Component {
                     <tr key={donation.created_at}>
                       <td><Link to={`/organizations/${donation.pledgeling_organization_id}`}>{donation.pledgeling_organization_name}</Link></td>
                       <td>${donation.amount.toFixed(2)}</td>
-                      <td>{donation.created_at}</td>
+                      <td>{formatDate(donation.created_at)}</td>
                       <td>{ this.tweetButton(donation) }</td>
                     </tr>
                   ))
@@ -116,7 +126,7 @@ class Profile extends Component {
   }
 
   render(){
-    const { loading, user, user: { nickname, stats } } = this.state
+    const { loading, errors, message, user, user: { nickname, stats } } = this.state
     const { currentUser } = this.props
 
     return (
@@ -130,11 +140,13 @@ class Profile extends Component {
               </h1>
             </div>
             <div className='col-md-5'>
-              <h1>{ !loading && stats.leaderboard_position }</h1>
+              <h1>{ !loading && stats && stats.leaderboard_position }</h1>
             </div>
           </div>
           <div className='card-body'>
-            { loading ? <Spinner /> : this.formatBody() }
+            { errors && <p style={{color: 'red'}}>{ errors }</p> }
+            { message && <p style={{color: 'green'}}>{ message }</p> }
+            { loading ? <Spinner /> : (user ? this.formatBody() : <Redirect to='/welcome' errors={'blah'} />) }
           </div>
         </div>
         { this.adminView() }

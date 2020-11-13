@@ -11,10 +11,10 @@ Rails.application.routes.draw do
     get 'leaderboard' => 'users#leaderboard'
   end
 
+  get 'auth/auth0/callback' => 'auth0#callback'
+  get 'auth/failure' => 'auth0#failure'
+  get 'auth/logout' => 'logout#logout'
+
   get '*path', to: 'static#root'
   # get 'about' => 'static#about'
-
-  # get 'auth/auth0/callback' => 'auth0#callback'
-  # get 'auth/failure' => 'auth0#failure'
-  # get 'auth/logout' => 'logout#logout'
 end

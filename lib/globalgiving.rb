@@ -1,10 +1,9 @@
-class Pledgeling
-  BASE_URL = ENV['PLEDGELING_URL']
-  API_KEY = ENV['PLEDGELING_API_KEY']
-  HEADERS = { 'Authorization' => "Bearer #{API_KEY}" }
+module GlobalGiving
+  BASE_URL = ENV['GLOBALGIVING_URL']
+  API_KEY = ENV['GLOBALGIVING_API_KEY']
 
   def self.request(method, path, query)
-    request = HTTParty.send(method, "#{BASE_URL}#{path}", query: query, headers: HEADERS)
+    request = HTTParty.send(method, "#{BASE_URL}#{path}?api_key=#{API_KEY}", query: query)
     unless request.code / 200 == 1
       Rails.logger.error(code: request.code, message: request.message)
       return false

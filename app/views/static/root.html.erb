@@ -1,10 +1,16 @@
 <div id='root'></div>
 
 <script type="text/javascript">
-  window.currentUser = {
-    id: "<%= current_user.resource_id %>",
-    email: "<%= current_user.email %>"
+  window.currentUser = 
+  <% if current_user %>
+  {
+    id: "<%= current_user&.resource_id %>",
+    email: "<%= current_user&.email %>"
   }
+  <% else %>
+    null
+  <% end %>
   window.apiUrl = '<%= ENV['API_URL'] %>'
+  window.authenticityToken = '<%= form_authenticity_token %>'
 </script>
 <%= javascript_pack_tag 'router' %>

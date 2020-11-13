@@ -13,7 +13,8 @@ class Organizations extends Component {
   }
 
   componentDidMount(){
-    getOrganizations().then(({organizations}) => this.setState({ organizations, loading: false }))
+    const urlParams = new URLSearchParams(window.location.search).toString()
+    getOrganizations(urlParams).then(({organizations}) => this.setState({ organizations, loading: false }))
   }
 
   formatBody() {
@@ -23,8 +24,8 @@ class Organizations extends Component {
         {
           organizations.map(({ id, name, mission, website_url, logo_url}) => (
             <div className='organization row' key={id}>
-              <div className='image col-md-4' style={{backgroundImage: `url(${logo_url})`}} />
-              <div className='col-md-8'>
+              <div className='col-md-2' style={{backgroundColor: '#dafcef', fontFamily: 'Berkshire Swash, cursive', fontSize: '80px', textAlign: 'center'}}>{name[0].toUpperCase()}</div>
+              <div className='col-md-10'>
                 <h3>{ name }</h3>
                 {
                   mission && <p>{ mission.substr(0, 300) }</p>

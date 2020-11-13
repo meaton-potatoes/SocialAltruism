@@ -1,5 +1,5 @@
-const getOrganizations = () => {
-  return fetch(`${apiUrl}/api/organizations`, {
+const getOrganizations = (paramString) => {
+  return fetch(`${apiUrl}/api/organizations?${paramString}`, {
     headers: {
       'Content-Type': 'application/json'
     }

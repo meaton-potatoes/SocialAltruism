@@ -1,13 +1,20 @@
 const createDonation = donation => {
-  return fetch(
-    `${apiUrl}/api/organizations/${donation.pledgeling_organization_id}/donations`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ donation })
+  return new Promise((resolve, reject) => {
+    fetch(
+      `${apiUrl}/api/organizations/${donation.pledgeling_organization_id}/donations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ donation })
+      })
+    .then(response => {
+      if (response.ok) {
+        return resolve(response.json())
+      }
+      return reject(response.json())
     })
-  .then(response => response.json())
+  })
 }
 
 const getDonationStats = () => {

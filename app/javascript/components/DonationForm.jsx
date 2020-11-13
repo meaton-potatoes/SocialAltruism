@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getOrganization, createDonation } from 'utils'
+import { Redirect } from 'react-router-dom'
 import { Spinner } from 'components'
 
 class DonationForm extends Component {
@@ -26,7 +27,7 @@ class DonationForm extends Component {
   }
 
   setCard(field, { currentTarget: { value }}){
-    let { donation, donation: { card } } = this.state.donation
+    let { donation, donation: { card } } = this.state
     card[field] = value
     this.setState({donation: { ...donation, ['card']: card } })
   }
@@ -35,18 +36,21 @@ class DonationForm extends Component {
     e.preventDefault()
 
     const { donation, organization: { id, name} } = this.state
-    createDonation(Object.assign(donation, {pledgeling_organization_id: id, pledgeling_organization_name: name}))
-    .then(({ message, success }) => {
-      if (success) {
-        return <Redirect to={`/users/${id}`} message={message} />
-      } else {
-        this.setState({ errors: message })
-      }
+    this.setState({ processingPayment: true }, () => {
+      createDonation(Object.assign(donation, {pledgeling_organization_id: id, pledgeling_organization_name: name}))
+      .then(
+        ({ message }) => this.setState({ redirect: { to: `/users/${currentUser.id}`, props: { message } } }), // success
+        ({ message }) => this.setState({ errors: message, processingPayment: false }) // failure
+      )
     })
   }
 
   formatBody() {
-    const { organization, donation, donation: { amount, card: { number, cvc, exp_month, exp_year }} } = this.state
+    const { redirect, organization, donation, processingPayment, donation: { amount, card: { number, cvc, exp_month, exp_year }} } = this.state
+    if (redirect) {
+      return <Redirect to={redirect.to} {...redirect.props} />
+    }
+
     return (
       <form>
         <div className='row'>
@@ -140,8 +144,9 @@ class DonationForm extends Component {
                 className='form-control btn btn-primary'
                 id='donate'
                 onClick={e => this.handleSubmit(e)}
+                disabled={processingPayment}
               >
-                Donate to {organization.name}!
+                { processingPayment ? 'Processing Payment' : `Donate to ${organization.name}!` }
               </button>
             </div>
           </div>

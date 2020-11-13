@@ -8,13 +8,13 @@ class Api::UsersController < ApplicationController
   def show
     @user = User.find_by(resource_id: params[:id])
     if !@user
-      return render json: {message: 'User not found', success: false}, status: 404
+      return render json: {message: 'User not found'}, status: 404
     elsif @user.privacy_level == 'users' && !current_user
-      return render json: {message: 'You must be logged in to view this profile.', success: false}, status: 403
+      return render json: {message: 'You must be logged in to view this profile.'}, status: 403
     elsif @user.privacy_level == 'friends'
       # implement later
     elsif @user.privacy_level == 'only_me' && @user != current_user
-      return render json: {message: 'You don\'t have permission to view this profile.', success: false}, status: 403
+      return render json: {message: 'You don\'t have permission to view this profile.'}, status: 403
     end
   end
 

@@ -5,6 +5,9 @@ module MoneyHelper
 
   def self.progress_bar(user)
     date = Time.now.utc
-    user.donations.live.where(created_at: date.beginning_of_month..date.end_of_month).sum(:amount) / user.monthly_goal * 100
+    donations = user.donations.where(created_at: date.beginning_of_month..date.end_of_month)
+    return unless donations.any?
+
+    donations.sum(:amount) / user.monthly_goal * 100
   end
 end

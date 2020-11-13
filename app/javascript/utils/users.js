@@ -12,7 +12,7 @@ const getUser = id => {
 const updateUser = user => {
   return fetch(
     `${apiUrl}/api/users/${user.id}`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },

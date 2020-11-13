@@ -24,10 +24,16 @@ class Api::DonationsController < ApplicationController
     @donation = current_user.donations.new(donation_params)
 
     if @donation.save
-      return render json: {message: "Your donation of was processed!", success: true}, status: :ok
+      message = if @donation.live
+                  'Your donation of was processed!'
+                else
+                  'Your TEST donation was processed!'
+                end
+
+      return render json: {message: message}, status: :ok
     end
 
-    render json: {message: @donation.errors.full_messages.join(', '), success: false}, status: :unprocessable_entity
+    render json: {message: @donation.errors.full_messages.join(', ')}, status: :unprocessable_entity
   end
 
   private

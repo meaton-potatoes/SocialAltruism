@@ -18,6 +18,13 @@ class User < ApplicationRecord
     donations.where(created_at: date.beginning_of_month..date.end_of_month).sum(:amount) >= monthly_goal
   end
 
+  def to_hash
+    {
+      id: resource_id,
+      email: email
+    }
+  end
+
   private
   def set_resource_id
     self.resource_id ||= SecureRandom.hex(12)
