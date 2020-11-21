@@ -37,7 +37,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'httparty'
 gem 'stripe'
-gem 'omniauth-auth0', '~> 2.2'
+gem 'omniauth-auth0', '~> 2.4'
 gem 'omniauth-rails_csrf_protection', '~> 0.1'
 gem 'webpacker', '~> 5.x'
 
