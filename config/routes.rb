@@ -3,11 +3,13 @@ Rails.application.routes.draw do
 
   namespace :api, constraints: { format: 'json' } do
     get 'donations/stats' => 'donations#stats'
-    resources :donations, only: [:show]
+    resources :donations, only: [:show, :index]
     resources :organizations do
       resources :donations, only: [:create]
     end
-    resources :users
+    resources :users do
+      resources :donations, only: [:index]
+    end
     get 'leaderboard' => 'users#leaderboard'
   end
 

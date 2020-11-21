@@ -13,8 +13,7 @@ class Organizations extends Component {
   }
 
   componentDidMount(){
-    const urlParams = new URLSearchParams(window.location.search).toString()
-    getOrganizations(urlParams).then(({organizations}) => this.setState({ organizations, loading: false }))
+    getOrganizations(window.location.search).then(({organizations}) => this.setState({ organizations, loading: false }))
   }
 
   formatBody() {
@@ -30,7 +29,9 @@ class Organizations extends Component {
                 {
                   mission && <p>{ mission.substr(0, 300) }</p>
                 }
-                <p><a href={website_url} target='_blank'>Website</a></p>
+                {
+                  website_url && <p><a href={website_url} target='_blank'>Website</a></p>
+                }
                 <p><Link to={`/organizations/${id}/donations/new`}>Donate</Link></p>
               </div>
             </div>

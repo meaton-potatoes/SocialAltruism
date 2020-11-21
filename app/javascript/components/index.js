@@ -8,9 +8,13 @@ import Profile from './Profile'
 import About from './About'
 import ProfileForm from './ProfileForm'
 import Leaderboard from './Leaderboard'
+import Organization from './Organization'
+import DonationHistory from './DonationHistory'
+import AlertMessage from './AlertMessage'
 
 export {
   App,
+  AlertMessage,
   Navbar,
   Welcome,
   Organizations,
@@ -19,5 +23,7 @@ export {
   Profile,
   About,
   ProfileForm,
-  Leaderboard
+  Leaderboard,
+  Organization,
+  DonationHistory
 }

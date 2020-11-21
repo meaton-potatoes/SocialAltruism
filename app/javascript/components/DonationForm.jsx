@@ -1,13 +1,20 @@
 import React, { Component } from 'react'
-import { getOrganization, createDonation } from 'utils'
+import { createDonation } from 'utils'
 import { Redirect } from 'react-router-dom'
-import { Spinner } from 'components'
+import { AlertMessage, Spinner } from 'components'
+
+const formatSuccessMessage = ({ live, amount, pledgeling_organization_name }) => {
+  return [
+    'Your',
+    (live ? null : 'TEST'),
+    `donation of $${parseFloat(amount).toFixed(2)} to ${pledgeling_organization_name} has been processed!`
+  ].filter(x => x).join(' ')
+}
 
 class DonationForm extends Component {
   constructor() {
     super()
     this.state = {
-      organization: {},
       donation: {
         card: {
           number: '',
@@ -16,14 +23,8 @@ class DonationForm extends Component {
           exp_year: 2020
         },
         amount: ''
-      },
-      loading: true
+      }
     }
-  }
-
-  componentDidMount(){
-    const { organization_id } = this.props.match.params
-    getOrganization(organization_id).then(({organization}) => this.setState({ organization, loading: false }))
   }
 
   setCard(field, { currentTarget: { value }}){
@@ -35,20 +36,32 @@ class DonationForm extends Component {
   handleSubmit(e){
     e.preventDefault()
 
-    const { donation, organization: { id, name} } = this.state
-    this.setState({ processingPayment: true }, () => {
-      createDonation(Object.assign(donation, {pledgeling_organization_id: id, pledgeling_organization_name: name}))
-      .then(
-        ({ message }) => this.setState({ redirect: { to: `/users/${currentUser.id}`, props: { message } } }), // success
-        ({ message }) => this.setState({ errors: message, processingPayment: false }) // failure
-      )
+    this.setState({ loading: true }, () => {
+      const { donation } = this.state
+      const { organization: { id, name} } = this.props
+      this.setState({ processingPayment: true }, () => {
+        createDonation(Object.assign(donation, {pledgeling_organization_id: id, pledgeling_organization_name: name}))
+        .then(donation => {
+          return this.setState({
+            loading: false,
+            redirect: {
+              to: `/users/${currentUser.id}`,
+              props: { message: formatSuccessMessage(donation) }
+            }
+          })
+        })
+        .catch(({ errors }) => {
+          this.setState({ loading: false, errors, processingPayment: false })
+        })
+      })
     })
   }
 
   formatBody() {
-    const { redirect, organization, donation, processingPayment, donation: { amount, card: { number, cvc, exp_month, exp_year }} } = this.state
+    const { redirect, donation, processingPayment, donation: { amount, card: { number, cvc, exp_month, exp_year }} } = this.state
+    const { organization } = this.props
     if (redirect) {
-      return <Redirect to={redirect.to} {...redirect.props} />
+      return <Redirect to={{pathname: redirect.to, state: redirect.props}} />
     }
 
     return (
@@ -165,8 +178,8 @@ class DonationForm extends Component {
             <h1><i className="fas fa-hand-holding-usd"></i> Make a donation</h1>
           </div>
         </div>
+        <AlertMessage errors={errors} />
         <div className="card-body">
-          { errors && <p style={{color: 'red'}}>{ errors }</p> }
           { loading ? <Spinner /> : this.formatBody() }
         </div>
       </div>

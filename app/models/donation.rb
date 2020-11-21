@@ -15,6 +15,16 @@ class Donation < ApplicationRecord
     @card = params&.slice(:card).to_h
   end
 
+  def attributes
+    {
+      pledgeling_organization_id: pledgeling_organization_id,
+      pledgeling_organization_name: pledgeling_organization_name,
+      amount: amount.to_f,
+      created_at: created_at,
+      live: live
+    }
+  end
+
   def set_stripe_token!
     begin
       @stripe_token = Stripe::Token.create(@card)

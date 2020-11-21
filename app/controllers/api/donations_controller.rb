@@ -21,19 +21,19 @@ class Api::DonationsController < ApplicationController
   end
 
   def create
-    @donation = current_user.donations.new(donation_params)
+    donation = current_user.donations.new(donation_params)
 
-    if @donation.save
-      message = if @donation.live
-                  'Your donation of was processed!'
-                else
-                  'Your TEST donation was processed!'
-                end
-
-      return render json: {message: message}, status: :ok
+    if donation.save
+      return render json: donation.to_json, status: :ok
     end
 
-    render json: {message: @donation.errors.full_messages.join(', ')}, status: :unprocessable_entity
+    render json: { errors: donation.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def index
+    donations = current_user.donations
+    donations = donations.where(pledgeling_organization_id: params[:organization_id]) if params[:organization_id]
+    render json: donations.to_json, status: :ok
   end
 
   private

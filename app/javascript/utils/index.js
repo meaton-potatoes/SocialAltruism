@@ -5,7 +5,8 @@ import {
 
 import {
   createDonation,
-  getDonationStats
+  getDonationStats,
+  getDonations
 } from './donations'
 
 import {
@@ -14,12 +15,18 @@ import {
   getLeaderboard
 } from './users'
 
+import {
+  request
+} from './requests'
+
 export {
   getOrganizations,
   getOrganization,
   createDonation,
+  getDonations,
   getDonationStats,
   getUser,
   updateUser,
-  getLeaderboard
+  getLeaderboard,
+  request
 }

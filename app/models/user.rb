@@ -9,6 +9,15 @@ class User < ApplicationRecord
 
   before_save :set_nickname
 
+  def to_json
+    {
+      id: resource_id,
+      nickname: nickname,
+      monthly_goal: monthly_goal,
+      stats: stats
+    }
+  end
+
   def total_donated_amount
     donations.sum(:amount)
   end
@@ -22,6 +31,15 @@ class User < ApplicationRecord
     {
       id: resource_id,
       email: email
+    }
+  end
+
+  def stats
+    {
+      total_donations: donations.count,
+      total_amount_donated: donations.sum(:amount).to_f,
+      leaderboard_position: LeaderboardHelper.find_user_position(self),
+      progress_bar: MoneyHelper.progress_bar(self)
     }
   end
 

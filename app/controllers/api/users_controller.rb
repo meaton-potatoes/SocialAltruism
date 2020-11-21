@@ -16,6 +16,8 @@ class Api::UsersController < ApplicationController
     elsif @user.privacy_level == 'only_me' && @user != current_user
       return render json: {message: 'You don\'t have permission to view this profile.'}, status: 403
     end
+
+    render json: @user.to_json, status: :ok
   end
 
   # def edit
@@ -31,7 +33,7 @@ class Api::UsersController < ApplicationController
       return render json: {message: 'Your profile successfully updated', success: true}
     end
 
-    render json: {message: current_user.errors.full_messages, success: false}
+    render json: { errors: current_user.errors.full_messages }, status: :unprocessable_entity
   end
 
   def leaderboard

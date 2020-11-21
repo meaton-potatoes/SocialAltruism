@@ -1,17 +1,18 @@
-const getOrganizations = (paramString) => {
-  return fetch(`${apiUrl}/api/organizations?${paramString}`, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(response => response.json())
+import { request } from './'
+
+const getOrganizations = params => {
+  return request({
+    method: 'GET',
+    path: `${apiUrl}/api/organizations`,
+    urlParams: params
+  })
 }
 
 const getOrganization = id => {
-  return fetch(`${apiUrl}/api/organizations/${id}`, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(response => response.json())
+  return request({
+    method: 'GET',
+    path: `${apiUrl}/api/organizations/${id}`
+  })
 }
 
 export {

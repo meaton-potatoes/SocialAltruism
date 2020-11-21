@@ -1,36 +1,25 @@
+import { request } from './'
+
 const getUser = id => {
-  return fetch(
-    `${apiUrl}/api/users/${id}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-  .then(response => response.json())
+  return request({
+    method: 'GET',
+    path: `${apiUrl}/api/users/${id}`
+  })
 }
 
 const updateUser = user => {
-  return fetch(
-    `${apiUrl}/api/users/${user.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ user })
-    }
-  )
-  .then(response => response.json())
+  return request({
+    method: 'PUT',
+    path: `${apiUrl}/api/users/${user.id}`,
+    body: { user }
+  })
 }
 
 const getLeaderboard = () => {
-  return fetch(
-    `${apiUrl}/api/leaderboard`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-  .then(response => response.json())
+  return request({
+    method: 'GET',
+    path: `${apiUrl}/api/leaderboard`
+  })
 }
 
 export {

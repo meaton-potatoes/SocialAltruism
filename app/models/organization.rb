@@ -37,6 +37,19 @@ class Organization
       ].select { |v| v.present? }
     end
 
+    def as_json
+      {
+        id: id,
+        name: name,
+        website_url: website_url,
+        mission: mission,
+        logo_url: logo_url,
+        address: address,
+        coordinates: coordinates,
+        stats: stats
+      }
+    end
+
     def coordinates
       [lat, lon] if lat && lon
     end
