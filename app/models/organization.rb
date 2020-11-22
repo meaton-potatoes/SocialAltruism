@@ -12,6 +12,8 @@ class Organization
       page: params&.dig(:page)
     })
 
+    return parsed_response if !parsed_response
+
     parsed_response['results'] = parsed_response['results'].map { |result| Struct.convert(result) }
     parsed_response
   end

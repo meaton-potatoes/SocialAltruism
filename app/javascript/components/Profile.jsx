@@ -23,7 +23,7 @@ class Profile extends Component {
 
   render(){
     const { loading, errors, user } = this.state
-    const { message } = this.props.location.state
+    const { message } = this.props.location.state || {}
 
     if (loading) {
       return <Spinner color='#fff' />
@@ -31,6 +31,7 @@ class Profile extends Component {
 
     return (
       <React.Fragment>
+        <AlertMessage message={message} errors={errors} />
         <div className='card'>
           <div className='row banner'>
             <div className='col-md-7'>
@@ -43,7 +44,6 @@ class Profile extends Component {
               <h1>{ !loading && user.stats && user.stats.leaderboard_position }</h1>
             </div>
           </div>
-          <AlertMessage message={message} errors={errors} />
           <div className='row'>
             <div className='col-md-6'>
               <div className="card" style={{textAlign: 'center'}}>

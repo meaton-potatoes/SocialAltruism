@@ -1,10 +1,17 @@
 import React from 'react'
 
-const AlertMessage = ({ errors, message }) => (
-  <div className='card-body'>
-    { errors && <p style={{color: 'red'}}>{ errors.join(', ') }</p> }
-    { message && <p style={{color: 'green'}}>{ message }</p> }
-  </div>
-)
+const AlertMessage = ({ errors, message }) => {
+  if (errors || message) {
+    return (
+      <div className='card'>
+        <div className='card-body'>
+          { errors && <h5 style={{color: 'red'}}>{ errors.join(', ') }</h5> }
+          { message && <h5 style={{color: 'green'}}>{ message }</h5> }
+        </div>
+      </div>
+    )
+  }
+  return <React.Fragment />
+}
 
 export default AlertMessage

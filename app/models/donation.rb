@@ -46,10 +46,10 @@ class Donation < ApplicationRecord
     
     return self.errors[:pledgeling] << response['message'] unless response
 
-    self.currency = response['currency']
-    self.status = response['status']
-    self.pledgeling_id = response['id']
-    self.pledgeling_organization_id = response['organization_id']
+    self.currency                     = response['currency']
+    self.status                       = response['status']
+    self.pledgeling_id                = response['id']
+    self.pledgeling_organization_id   = response['organization_id']
     self.pledgeling_organization_name = response['organization_name']
   end
 

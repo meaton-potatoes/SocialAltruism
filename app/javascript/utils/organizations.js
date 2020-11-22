@@ -1,6 +1,7 @@
 import { request } from './'
 
 const getOrganizations = params => {
+  Object.keys(params).forEach(key => params[key] === undefined ? delete params[key] : {});
   return request({
     method: 'GET',
     path: `${apiUrl}/api/organizations`,

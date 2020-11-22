@@ -22,7 +22,7 @@ class ProfileForm extends Component {
 
   componentDidMount(){
     const { user_id } = this.props.match.params
-    getUser(user_id).then(({ user }) => this.setState({ user, loading: false}))
+    getUser(user_id).then(user => this.setState({ user, loading: false}))
   }
 
   handleChange({ currentTarget: { id, value }}) {
@@ -101,7 +101,7 @@ class ProfileForm extends Component {
                   type="text"
                   className="form-control"
                   id="monthly_goal"
-                  value={user.monthly_goal || ''}
+                  value={parseFloat(user.monthly_goal).toFixed(2) || ''}
                   step='.01'
                   onChange={(e) => this.handleChange(e)}
                 />

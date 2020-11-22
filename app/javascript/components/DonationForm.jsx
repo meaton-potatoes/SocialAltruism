@@ -130,7 +130,12 @@ class DonationForm extends Component {
                 onChange={(e) => this.setCard('exp_month', e)}
                 value={exp_month}
               >
-                { [...Array(12).keys()].map(i => <option key={i + 1}>{i + 1}</option>) }
+                {
+                  [...Array(12).keys()].map(i => {
+                    const num = i + 1
+                    return <option key={num}>{num <= 9 ? `0${num}` : num}</option>
+                  })
+                }
               </select>
             </div>
           </div>
@@ -172,17 +177,19 @@ class DonationForm extends Component {
     const { errors, loading } = this.state
 
     return(
-      <div className="card">
-        <div className='row banner'>
-          <div className='col-md-12'>
-            <h1><i className="fas fa-hand-holding-usd"></i> Make a donation</h1>
+      <React.Fragment>
+        <AlertMessage errors={errors} />
+        <div className="card">
+          <div className='row banner'>
+            <div className='col-md-12'>
+              <h1><i className="fas fa-hand-holding-usd"></i> Make a donation</h1>
+            </div>
+          </div>
+          <div className="card-body">
+            { loading ? <Spinner /> : this.formatBody() }
           </div>
         </div>
-        <AlertMessage errors={errors} />
-        <div className="card-body">
-          { loading ? <Spinner /> : this.formatBody() }
-        </div>
-      </div>
+      </React.Fragment>
     )
   }
 }

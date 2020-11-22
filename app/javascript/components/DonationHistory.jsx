@@ -24,17 +24,19 @@ class DonationHistory extends Component {
   }
 
   tweetButton({ amount, pledgeling_organization_name, live, created_at }) {
-    if (!live && created_at) {
-      return (
-        <a className="btn btn-primary btn-sm"
-              style={{backgroundColor: '#1b95e0'}}
-              href={`https://twitter.com/intent/tweet?text=I just donated $${parseFloat(amount).toFixed(2)} to ${pledgeling_organization_name}! Join me at altruism.social`}
-              target="_blank"
-        >
-          <i className="fab fa-twitter"></i> Tweet
-        </a>
-      )
+    if (!live) {
+      return <div>Test mode</div>
     }
+
+    return (
+      <a className="btn btn-primary btn-sm"
+            style={{backgroundColor: '#1b95e0'}}
+            href={`https://twitter.com/intent/tweet?text=I just donated $${parseFloat(amount).toFixed(2)} to ${pledgeling_organization_name}! Join me at altruism.social`}
+            target="_blank"
+      >
+        <i className="fab fa-twitter"></i> Tweet
+      </a>
+    )
   }
 
   render() {
@@ -48,7 +50,7 @@ class DonationHistory extends Component {
     return (
       <div className='card'>
         <div className='card-body'>
-          <h3 className='text-muted'></h3>
+          <h3 className='text-muted'>Admin View (this is only visible to you)</h3>
           <br />
           <table className='table'>
             <thead>

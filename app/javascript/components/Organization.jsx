@@ -14,7 +14,7 @@ class Organization extends Component {
 
   componentDidMount(){
     const { organization_id } = this.props.match.params
-    getOrganization(organization_id).then(({ organization }) => this.setState({ organization, loading: false }))
+    getOrganization(organization_id).then(organization => this.setState({ organization, loading: false }))
   }
 
   render() {
