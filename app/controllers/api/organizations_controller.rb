@@ -5,7 +5,8 @@ class Api::OrganizationsController < ApplicationController
       return render json: {
         organizations: organizations['results'].select {|r| r.id}.as_json,
         page: organizations['page'],
-        total_count: organizations['total_count']
+        total_count: organizations['total_count'],
+        total_pages: (organizations['total_count'] / organizations['per'].to_f).ceil
       }, status: :ok
     end
 
