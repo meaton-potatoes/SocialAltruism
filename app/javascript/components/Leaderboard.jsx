@@ -34,7 +34,7 @@ class Leaderboard extends Component {
               return (
                 <tr key={user.id}>
                   <td>
-                    <a href="<%= user_path(user.resource_id) %>">
+                    <a href="<%= user_path(user.id) %>">
                       { user.id == currentUser.id ? 'You' : (user.nickname ? user.nickname : '???') }
                     </a>
                   </td>

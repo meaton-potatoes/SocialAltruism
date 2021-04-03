@@ -27,7 +27,8 @@ class Organization extends Component {
     return (
       <div>
         <DonationForm organization={organization} />
-        <DonationHistory user={currentUser} organization={organization}/>
+        <br />
+        <DonationHistory user={currentUser} organization={organization} showByDefault={false} />
       </div>
     )
   }

@@ -1,8 +1,6 @@
 require 'nickname_generator'
 
 class User < ApplicationRecord
-  before_create :set_resource_id
-
   has_many :donations
 
   enum privacy_level: [:everyone, :users, :friends, :only_me]
@@ -11,7 +9,7 @@ class User < ApplicationRecord
 
   def to_json
     {
-      id: resource_id,
+      id: id,
       nickname: nickname,
       monthly_goal: monthly_goal,
       stats: stats
@@ -29,7 +27,7 @@ class User < ApplicationRecord
 
   def to_hash
     {
-      id: resource_id,
+      id: id,
       email: email
     }
   end
@@ -44,9 +42,6 @@ class User < ApplicationRecord
   end
 
   private
-  def set_resource_id
-    self.resource_id ||= SecureRandom.hex(12)
-  end
 
   def set_nickname
     if !self.nickname || self.nickname.blank?

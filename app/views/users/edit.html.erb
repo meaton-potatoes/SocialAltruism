@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class='card-body'>
-    <form action="<%= user_path(current_user.resource_id) %>" method='post'>
+    <form action="<%= user_path(current_user.id) %>" method='post'>
       <input type="hidden" name="_method" value="put" />
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <div class='row'>
@@ -57,7 +57,7 @@
         </div>
       </div>      
       <button class='btn btn-primary'>Update</button>
-      <%= link_to 'Cancel', user_path(current_user.resource_id), class: 'btn btn-outline-secondary' %>
+      <%= link_to 'Cancel', user_path(current_user.id), class: 'btn btn-outline-secondary' %>
     </form>
   </div>
 </div>

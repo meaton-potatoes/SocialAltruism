@@ -1,7 +1,7 @@
 module Pledgeling
-  BASE_URL = ENV['PLEDGELING_URL']
-  API_KEY = ENV['PLEDGELING_API_KEY']
-  HEADERS = { 'Authorization' => "Bearer #{API_KEY}" }
+  BASE_URL  = ENV['PLEDGELING_URL']
+  API_KEY   = ENV['PLEDGELING_API_KEY']
+  HEADERS   = { 'Authorization' => "Bearer #{API_KEY}" }
 
   def self.request(method, path, query)
     request = HTTParty.send(method, "#{BASE_URL}#{path}", query: query, headers: HEADERS)

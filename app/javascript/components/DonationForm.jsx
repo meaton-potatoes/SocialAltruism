@@ -11,6 +11,11 @@ const formatSuccessMessage = ({ live, amount, pledgeling_organization_name }) =>
   ].filter(x => x).join(' ')
 }
 
+const amountMinusFee = amount => {
+  const multiplier = 1 - window.pledgeling_processing_fee
+  return (amount * multiplier)
+}
+
 class DonationForm extends Component {
   constructor() {
     super()
@@ -81,7 +86,7 @@ class DonationForm extends Component {
                   <div className="input-group-text">$</div>
                 </div>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="amount"
                   step='.01'
@@ -154,6 +159,16 @@ class DonationForm extends Component {
             </div>
           </div>
         </div>
+        {
+          amount && <div className='row'>
+                      <div className='col-md-12'>
+                        Our donation processing platform, Pledgeling, charges a {window.pledgeling_processing_fee * 100}% processing fee for all donations. 
+                        <span className='font-weight-bold'>
+                          * This means the amount donated directly to {organization.name} will be ${amountMinusFee(amount).toFixed(2)}. *
+                        </span>
+                      </div>
+                    </div>
+        }
         <div className='row'>
           <div className='col-md-12'>
             <div className='form-group'>
@@ -179,13 +194,11 @@ class DonationForm extends Component {
     return(
       <React.Fragment>
         <AlertMessage errors={errors} />
-        <div className="card">
-          <div className='row banner'>
-            <div className='col-md-12'>
-              <h1><i className="fas fa-hand-holding-usd"></i> Make a donation</h1>
-            </div>
-          </div>
-          <div className="card-body">
+        <div className='card'>
+          <div className='card-body'>
+            <h1>
+              <i className="fas fa-hand-holding-usd"></i> Make a donation
+            </h1>
             { loading ? <Spinner /> : this.formatBody() }
           </div>
         </div>

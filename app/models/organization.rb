@@ -1,7 +1,7 @@
 require 'pledgeling'
 
 class Organization
-  PER_PAGE = 25
+  PER_PAGE = 15
   PLEDGELING_DEFAULT_LOGO = 'https://res.cloudinary.com/pledgeling/w_266%2Ch_266%2Cc_fit/stg-media/images%2Fnpos%2Flogos%2Fdefault%2Flogo.jpg'
   STRUCT_FIELDS = [:id, :name, :website_url, :mission, :logo_url, :street1, :street2, :city, :region, :postal_code, :country, :lat, :lon]
 

@@ -9,29 +9,33 @@ const formatDate = str => {
 }
 
 class DonationHistory extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
     this.state = {
-      loading: true
+      loading: true,
+      show: props.showByDefault
     }
   }
 
   componentDidMount(){
     const { organization } = this.props
-    getDonations({ organization_id: organization && organization.id }).then(donations => {
-      this.setState({ donations, loading: false })
+    getDonations({ organization_id: organization && organization.id }).then(({ donations, stats }) => {
+      this.setState({ donations, stats, loading: false })
     })
   }
 
-  tweetButton({ amount, pledgeling_organization_name, live, created_at }) {
-    if (!live) {
-      return <div>Test mode</div>
-    }
+  toggle() {
+    this.setState({ show: !this.state.show })
+  }
+
+  tweetButton({ amount, pledgeling_organization_name, created_at }) {
+    const tweetText = `I just donated $${parseFloat(amount).toFixed(2)} to ${pledgeling_organization_name}! Join me at altruism.social`
 
     return (
-      <a className="btn btn-primary btn-sm"
+      <a className='btn btn-primary btn-sm'
             style={{backgroundColor: '#1b95e0'}}
-            href={`https://twitter.com/intent/tweet?text=I just donated $${parseFloat(amount).toFixed(2)} to ${pledgeling_organization_name}! Join me at altruism.social`}
+            href={`https://twitter.com/intent/tweet?text=${tweetText}`}
             target="_blank"
       >
         <i className="fab fa-twitter"></i> Tweet
@@ -40,8 +44,8 @@ class DonationHistory extends Component {
   }
 
   render() {
-    const { organization } = this.props
-    const { donations, loading } = this.state
+    const { title, organization } = this.props
+    const { donations, stats, loading, show } = this.state
 
     if (loading) {
       return <Spinner />
@@ -50,31 +54,39 @@ class DonationHistory extends Component {
     return (
       <div className='card'>
         <div className='card-body'>
-          <h3 className='text-muted'>Admin View (this is only visible to you)</h3>
-          <br />
-          <table className='table'>
-            <thead>
-              <tr>
-                <th>Organization</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                donations.map(donation => (
-                  <tr key={donation.created_at}>
-                    <td><Link to={`/organizations/${donation.pledgeling_organization_id}`}>{donation.pledgeling_organization_name}</Link></td>
-                    <td>${parseFloat(donation.amount).toFixed(2)}</td>
-                    <td>{formatDate(donation.created_at)}</td>
-                    <td>{ this.tweetButton(donation) }</td>
-                  </tr>
-                ))
-              }
-              { donations.length == 0 && <tr><td className='text-muted'>You haven't made any donations yet.</td></tr> }
-            </tbody>
-          </table>
+          <h1 style={{ display: 'flex', justifyContent: 'space-between'}}>
+            <span><i className='fas fa-history' /> Donation History</span>
+            <i className={`fas fa-angle-${show ? 'down' : 'right'}`} onClick={() => this.toggle()} />
+          </h1>
+          {
+            show && <table className='table'>
+                      <thead>
+                        <tr>
+                          <th>Organization</th>
+                          <th>Amount</th>
+                          <th>Date</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          donations.map(donation => (
+                            <tr key={donation.created_at}>
+                              <td>
+                                <Link to={`/organizations/${donation.pledgeling_organization_id}`}>
+                                  { donation.live ? donation.pledgeling_organization_name : `[TEST] ${donation.pledgeling_organization_name}`}
+                                </Link>
+                              </td>
+                              <td>${parseFloat(donation.amount).toFixed(2)}</td>
+                              <td>{formatDate(donation.created_at)}</td>
+                              <td>{ donation.live && this.tweetButton(donation) }</td>
+                            </tr>
+                          ))
+                        }
+                        { donations.length == 0 && <tr><td className='text-muted'>You haven't made any donations yet.</td></tr> }
+                      </tbody>
+                    </table>
+          }
         </div>
       </div>
     )

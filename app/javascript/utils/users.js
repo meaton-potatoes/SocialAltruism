@@ -7,6 +7,13 @@ const getUser = id => {
   })
 }
 
+const getFriends = id => {
+  return request({
+    method: 'GET',
+    path: `${apiUrl}/api/users/${id}/friends`
+  })
+}
+
 const updateUser = user => {
   return request({
     method: 'PUT',

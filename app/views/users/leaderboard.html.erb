@@ -14,7 +14,7 @@
         <% @ranked_donations.each do |user, total| %>
           <tr>
             <td>
-              <a href="<%= user_path(user.resource_id) %>">
+              <a href="<%= user_path(user.id) %>">
                 <% if user == current_user %>
                   You
                 <% else %>

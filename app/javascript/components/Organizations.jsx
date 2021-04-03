@@ -36,28 +36,15 @@ class Organizations extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state
     if (prevState.page != page || prevState.query != query) {
-      this.updateWindowLocation({ query, page })
       this.getOrganizations()
     }
-  }
-
-  updateWindowLocation(params) {
-    let currentUrlParams = new URLSearchParams(window.location.search);
-    for (const key in params) {
-      if (params[key]) {
-        currentUrlParams.set(key, params[key])
-      } else {
-        currentUrlParams.delete(key)
-      }
-    }
-    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString())
   }
 
   getOrganizations(){
     const { query, page } = this.state
     getOrganizations({ query, page })
       .then(({page, organizations, total_count, total_pages}) => {
-        return this.setState({ page, organizations, totalCount: total_count, totalPages: total_pages, loading: false })
+        return this.setState({ page, organizations, totalCount: total_count, totalPages: total_pages, loading: false, errors: null })
       })
       .catch(({ errors }) => {
         return this.setState({ errors, organizations: null, totalCount: null, totalPages: null, loading: false })
@@ -103,61 +90,46 @@ class Organizations extends Component {
     )
   }
 
-  formatBody() {
-    const { organizations, totalCount } = this.state
-    if (organizations) {
-      return (
-        <div id='organizations'>
-          <div className='text-center'>{totalCount} result(s)</div>
-          {
-            organizations.map(({ id, name, mission, website_url, logo_url}) => (
-              <div className='organization row' key={id}>
-                <div className='col-md-2' style={{backgroundColor: '#dafcef', fontFamily: 'Berkshire Swash, cursive', fontSize: '80px', textAlign: 'center'}}>{name[0].toUpperCase()}</div>
-                <div className='col-md-10'>
-                  <h3>{ name }</h3>
-                  {
-                    mission && <p>{ mission.substr(0, 300) }</p>
-                  }
-                  {
-                    website_url && <p><a href={website_url} target='_blank'>Website</a></p>
-                  }
-                  <p><Link to={`/organizations/${id}/donations/new`}>Donate</Link></p>
-                </div>
-              </div>
-            ))
-          }
-          { this.formatPagination() }
-        </div>
-      )
-    }
-  }
-
   render() {
-    const { loading, errors, searchField } = this.state
+    const { loading, errors, searchField, organizations, totalCount } = this.state
 
     if (loading) {
-      return <Spinner color='#fff' />
+      return <Spinner color='#000' />
     }
 
     return (
       <React.Fragment>
         <AlertMessage errors={errors} />
         <div className='card'>
-          <div className='row banner'>
-            <div className='col-md-8'>
-              <h1><i className='fas fa-building' /> Nonprofits</h1>
-            </div>
-            <div className='col-md-4'>
-              <form className='input-group mb-3'>
-                <input type='text' className='form-control' onChange={e => this.updateSearchField(e)} value={searchField} />
-                <div className='input-group-append'>
-                  <button className='btn btn-primary' onClick={e => this.search(e)}>Search</button>
-                </div>
-              </form>
-            </div>
-          </div>
           <div className='card-body'>
-            { this.formatBody() }
+            <div className='row'>
+              <div className='col-md-12'>
+                <h1>🏛 Organizations</h1>
+              </div>
+            </div>
+            <div id='organizations'>
+              <div className='col-md-12'>
+                <form className='input-group mb-3'>
+                  <input type='text' className='form-control' onChange={e => this.updateSearchField(e)} value={searchField} />
+                  <div className='input-group-append'>
+                    <button className='btn btn-primary' onClick={e => this.search(e)}>Search</button>
+                  </div>
+                </form>
+              </div>
+              <div className='text-center'>{totalCount} result(s)</div>
+              <table className='table'>
+                <tbody>
+                  {
+                    organizations.map(({ id, name, mission, website_url, logo_url}) => (
+                      <tr key={id}>
+                        <td><Link to={`/organizations/${id}/donations/new`}>{name}</Link></td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+              { this.formatPagination() }
+            </div>
           </div>
         </div>
       </React.Fragment>

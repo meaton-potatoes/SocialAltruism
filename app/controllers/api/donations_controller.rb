@@ -3,21 +3,8 @@ class Api::DonationsController < ApplicationController
 
   skip_before_action :verify_authenticity_token, only: [:create]
 
-  # def show
-  #   @donation = Donation.find_by(resource_id: params[:id])
-  #   unless @donation && @donation.user == current_user
-  #     flash[:alert] = 'You cannot view that donation'
-  #     redirect_to root_path and return
-  #   end
-  # end
-
   def stats
-    return render json: {
-      stats: {
-        'Total Donations' => ActiveSupport::NumberHelper.number_to_delimited(Donation.live.count),
-        'Total Amount Donated' => MoneyHelper.format_amount(Donation.live.sum(:amount))
-      }
-    }, status: :ok
+    return render json: Donation.high_level_stats, status: :ok
   end
 
   def create
@@ -33,7 +20,10 @@ class Api::DonationsController < ApplicationController
   def index
     donations = current_user.donations
     donations = donations.where(pledgeling_organization_id: params[:organization_id]) if params[:organization_id]
-    render json: donations.to_json, status: :ok
+    render json: {
+      donations: donations.order(created_at: :desc).limit(10),
+      stats: current_user.stats
+    }, status: :ok
   end
 
   private

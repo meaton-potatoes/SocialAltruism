@@ -1,10 +1,11 @@
 <div id='root'></div>
 
 <script type="text/javascript">
+  window.pledgeling_processing_fee = parseFloat(<%= ENV['PLEDGELING_PROCESSING_FEE'] %>)
   window.currentUser = 
   <% if current_user %>
   {
-    id: "<%= current_user&.resource_id %>",
+    id: "<%= current_user&.id %>",
     email: "<%= current_user&.email %>"
   }
   <% else %>

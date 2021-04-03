@@ -16,8 +16,8 @@
             <%= current_user.email %>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <%= link_to 'Profile', user_path(current_user.resource_id), class: "dropdown-item" %>
-            <%= link_to 'Edit Profile', edit_user_path(current_user.resource_id), class: 'dropdown-item' %>
+            <%= link_to 'Profile', user_path(current_user.id), class: "dropdown-item" %>
+            <%= link_to 'Edit Profile', edit_user_path(current_user.id), class: 'dropdown-item' %>
             <%= link_to 'View Nonprofits', organizations_path, class: 'dropdown-item' %>
             <%= link_to 'Leaderboard', leaderboard_path, class: 'dropdown-item' %>
             <div class="dropdown-divider"></div>

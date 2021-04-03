@@ -2,7 +2,6 @@ class Donation < ApplicationRecord
   attr_accessor :stripe_token, :card
 
   belongs_to :user
-  before_create :set_resource_id
   validate :set_stripe_token!, :submit_to_pledgeling!
 
   scope :live, -> { where(live: true) }
@@ -35,7 +34,7 @@ class Donation < ApplicationRecord
   end
 
   def submit_to_pledgeling!
-    response = Pledgeling.post('/v1/donations', {
+    response = ::Pledgeling.post('/v1/donations', {
       charge_source: (self.live ? @stripe_token.id : TEST_STRIPE_TOKEN),
       amount: self.amount.to_f,
       organization_id: self.pledgeling_organization_id,
@@ -43,7 +42,7 @@ class Donation < ApplicationRecord
       first_name: user.first_name,
       last_name: user.last_name
     })
-    
+
     return self.errors[:pledgeling] << response['message'] unless response
 
     self.currency                     = response['currency']
@@ -53,16 +52,11 @@ class Donation < ApplicationRecord
     self.pledgeling_organization_name = response['organization_name']
   end
 
-  def self.total_stats
+  def self.high_level_stats
     donations = Donation.all
     {
       donation_number: donations.count,
       sum_donations: donations.sum(:amount)
     }
-  end
-
-  private
-  def set_resource_id
-    self.resource_id ||= SecureRandom.hex(12)
   end
 end

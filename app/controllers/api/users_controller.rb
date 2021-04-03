@@ -6,7 +6,7 @@ class Api::UsersController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:update]
 
   def show
-    @user = User.find_by(resource_id: params[:id])
+    @user = User.find(params[:id])
     if !@user
       return render json: {message: 'User not found'}, status: 404
     elsif @user.privacy_level == 'users' && !current_user
@@ -21,7 +21,7 @@ class Api::UsersController < ApplicationController
   end
 
   # def edit
-  #   @user = User.find_by(resource_id: params[:id])
+  #   @user = User.find(params[:id])
   #   unless @user && @user == current_user
   #     flash[:alert] = 'You don\'t have permission to view this page.'
   #     redirect_to root_path and return

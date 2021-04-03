@@ -11,10 +11,16 @@ import Leaderboard from './Leaderboard'
 import Organization from './Organization'
 import DonationHistory from './DonationHistory'
 import AlertMessage from './AlertMessage'
+import Dashboard from './Dashboard'
+import Stats from './Stats'
+import Friends from './Friends'
+import Garden from './Garden'
 
 export {
   App,
   AlertMessage,
+  Dashboard,
+  Stats,
   Navbar,
   Welcome,
   Organizations,
@@ -25,5 +31,7 @@ export {
   ProfileForm,
   Leaderboard,
   Organization,
-  DonationHistory
+  DonationHistory,
+  Friends,
+  Garden
 }
